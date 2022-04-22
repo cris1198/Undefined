@@ -18,5 +18,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/articulos/buscar','App\Http\Controllers\AmbienteController@search'); //buscador
-Route::get('/articulos','App\Http\Controllers\AmbienteController@show');
+Route::get('/articulos/buscar','App\Http\Controllers\AmbienteController@search'); //buscador por palabra
+Route::get('/articulos','App\Http\Controllers\AmbienteController@getById'); //devuelve un ambiente por el id
