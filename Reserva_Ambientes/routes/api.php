@@ -18,5 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/articulos/buscar','App\Http\Controllers\AmbienteController@search'); //buscador por palabra
-Route::get('/articulos','App\Http\Controllers\AmbienteController@getById'); //devuelve un ambiente por el id
+
+Route::get('/articulos','App\Http\Controllers\AmbienteController@getById'); //devuelve un Ambiente por el id
+Route::get('/articulos/buscar','App\Http\Controllers\AmbienteController@search'); //buscador de Ambientes por palabra
+Route::get('/articulos/filtro','App\Http\Controllers\AmbienteController@filter'); //filtro de Ambientes
+Route::get('/articulos/filtroCapacidad','App\Http\Controllers\AmbienteController@rangeFilter'); //filtro de Ambientes por un rango de capacidad

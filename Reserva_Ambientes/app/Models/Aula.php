@@ -23,4 +23,24 @@ class Aula extends Model
         ->orWhere('ubicacion', 'like', "%$query%")
         ->get();
     }
+
+    public static function filter($query=''){
+        if(!$query){
+            return self::all();
+        }
+        return self::where('caracteristicas', 'like', "%$query%")
+        ->orWhere('tipo', 'like', "%$query%")
+        ->get();
+    }
+
+    public static function rangeFilter($rangeUp='', $rangeDown=''){
+
+        if(!($rangeUp && $rangeDown) ){
+            return self::all();
+        }
+        
+        return self::where('capacidad', '<=', $rangeUp)
+        ->where('capacidad', '>=', $rangeDown)
+        ->get();
+    }
 }
