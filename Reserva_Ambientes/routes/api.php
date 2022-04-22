@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/articulos/buscar','App\Http\Controllers\AmbienteController@search'); //buscador
+Route::get('/articulos','App\Http\Controllers\AmbienteController@show');
