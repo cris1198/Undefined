@@ -7,16 +7,16 @@ use App\Models\Aula;
 
 class AmbienteController extends Controller
 {
-    public function index(Request $request)
+    public function index()                    //retorna todos los ambientes
     {
-        //
+        $ambientes = Aula::all();
+        return $ambientes;                     //JSON con los ambientes
     }
 
-    public function getById(Request $request)
+    public function getById($id)               //retorna un Ambiente por el ID
     {
-        $id = $request->input('id_aula');
-        $ambiente = Aula::findOrFail($id);
-        return $ambiente; 
+        $ambiente = Aula::findOrFail($id);     //si no encuentra ambiente devuelve falso
+        return $ambiente;                      //JSON con los ambientes
     }
 
     public function search(Request $request)   //busca codigo, nombreAula o ubicacion
@@ -26,11 +26,11 @@ class AmbienteController extends Controller
         return $ambientes;                     //devuelve JSON con datos de Aula
     }
 
-    public function filter(Request $request)   //busca tipo o caracteristicas
+    public function filter(Request $request)    //busca tipo o caracteristicas
     {
-        $buscar = $request->input('filtro');   //busca variables de el url filtro=palabra_filtrada
-        $ambientes = Aula::filter($buscar);    //devuelve coleccion de Aulas
-        return $ambientes;                     //devuelve JSON con datos de Aula
+        $filtrar = $request->input('filtro');   //busca variables de el url filtro=palabra_filtrada
+        $ambientes = Aula::filter($filtrar);    //devuelve coleccion de Aulas
+        return $ambientes;                      //devuelve JSON con datos de Aula
     }
 
     public function rangeFilter(Request $request)              //busca un rango de capacidad 
@@ -39,5 +39,23 @@ class AmbienteController extends Controller
         $rangeUp = $request->input('rango_Alto');              //busca variables de el url rango_Alto=Numero_Alto   
         $ambientes = Aula::rangeFilter($rangeUp, $rangeDown);  //devuelve coleccion de Aulas en el rango de capacidad
         return $ambientes;                                     //devuelve JSON con datos de Aula
+    }
+
+    public function update($id)               //actualiza los datos de un ambiente
+    {
+        Aula::findOrFail($id);                //si no encuentra ambiente devuelve falso
+        $ambientes = Aula::all();
+        return response()->json([              //JSON con los ambientes
+            'Respuesta' => 'Actualizado correctamente'
+        ], 202);                   
+    }
+
+    public function destroy($id)               //elimina un ambiente
+    {
+        Aula::findOrFail($id);                 //si no encuentra ambiente devuelve falso
+        Aula::destroy($id);
+        return response()->json([              //JSON con los ambientes
+            'Respuesta' => 'Eliminado correctamente'
+        ], 201);                               
     }
 }
