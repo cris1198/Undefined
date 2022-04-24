@@ -12,7 +12,18 @@ class AmbienteController extends Controller
         $ambientes = Aula::all();
         return $ambientes;                     //JSON con los ambientes
     }
-
+    public function store(Request $request)   {
+        $nuevaAula = new Aula();
+        $nuevaAula->id_administrador = 1;
+        $nuevaAula->capacidad = $request->capacidad;
+        $nuevaAula->codigo = $request->codigo;  
+        $nuevaAula->tipo = $request->tipo;  
+        $nuevaAula->caracteristicas = $request->caracteristicas;
+        $nuevaAula->nombreAula = $request->nombreAula; 
+        $nuevaAula->ubicacion = $request->ubicacion;
+        $nuevaAula->save();
+        $variablequenotieneimportancia=0;
+    }
     public function getById($id)               //retorna un Ambiente por el ID
     {
         $ambiente = Aula::findOrFail($id);     //si no encuentra ambiente devuelve falso
