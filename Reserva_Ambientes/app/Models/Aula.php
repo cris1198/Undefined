@@ -14,33 +14,16 @@ class Aula extends Model
     protected $fillable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
     protected $buscable = ['capacidad','codigo','tipo','caracteristicas','nombreAula','ubicacion'];
 
-    public static function search($query=''){
-        if(!$query){
-            return self::all();
-        }
-        return self::where('codigo', 'like', "%$query%")
-        ->orWhere('nombreAula', 'like', "%$query%")
-        ->orWhere('ubicacion', 'like', "%$query%")
-        ->get();
-    }
+    public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
 
-    public static function filter($query=''){
-        if(!$query){
-            return self::all();
-        }
-        return self::where('caracteristicas', 'like', "%$query%")
-        ->orWhere('tipo', 'like', "%$query%")
-        ->get();
-    }
-
-    public static function rangeFilter($rangeUp='', $rangeDown=''){
-
-        if(!($rangeUp && $rangeDown) ){
-            return self::all();
-        }
-        
         return self::where('capacidad', '<=', $rangeUp)
-        ->where('capacidad', '>=', $rangeDown)
+        ->where('capacidad', '>=', $rangeDown) 
+        ->where('caracteristicas', 'like', "%$caracteristicas%")
+        ->Where('tipo', 'like', "%$tipo%")
+        ->where('codigo', 'like', "%$buscar%")
+        ->orWhere('nombreAula', 'like', "%$buscar%")
+        ->orWhere('ubicacion', 'like', "%$buscar%")
         ->get();
     }
+
 }
