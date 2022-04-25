@@ -13,16 +13,57 @@ class AmbienteController extends Controller
         return $ambientes;                     //JSON con los ambientes
     }
     public function store(Request $request)   {
-        $nuevaAula = new Aula();
-        $nuevaAula->id_administrador = 1;
-        $nuevaAula->capacidad = $request->capacidad;
-        $nuevaAula->codigo = $request->codigo;  
-        $nuevaAula->tipo = $request->tipo;  
-        $nuevaAula->caracteristicas = $request->caracteristicas;
-        $nuevaAula->nombreAula = $request->nombreAula; 
-        $nuevaAula->ubicacion = $request->ubicacion;
-        $nuevaAula->save();
-        $variablequenotieneimportancia=0;
+        $capacidadCorrecto = AmbienteController::capacidadCorrecto($request->capacidad);
+        $codigoCorrecto = AmbienteController::codigoCorrecto($request->codigo);
+        if(!$capacidadCorrecto){
+            // $array1 = array(
+            //     "capacidad" => 0,
+            // );
+            // $myJSON = json_encode($array1);
+            // return $myJSON; 
+            return response()->json([   
+                'capacidad' => 0
+             ], 500);
+        }else{
+            if( !$codigoCorrecto){
+                // $array1 = array(
+                //     "codigo" => 0,
+                // );
+                // $myJSON = json_encode($array1);
+                // return $myJSON; 
+                return response()->json([   
+                    'codigo' => 0
+                 ], 500);
+            }else{
+                $new_classroom = new Aula($request->all());
+                $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
+                $new_classroom->imagen= $path; // en la base de datos se guarda la direccion referenciando a la imagen
+                $new_classroom->save();
+
+        
+                return response()->json([   
+                    'Respuesta' => 'Agregado Correctamente'
+                 ], 202);  
+            }
+        }
+        
+    }
+    private function codigoCorrecto($codigo){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
+        $codigoCorrecto =true;
+        $i = 0 ;
+        while($i < strlen($codigo) && $codigoCorrecto){
+            $car  = $codigo[$i];
+            if(!((ord($car)>= 48 && ord($car) <= 57) || (ord($car)>= 65 && ord($car)<=90) 
+                || (ord($car)>= 97 && ord($car)<=122) || ord($car)==35)){
+                $codigoCorrecto = 0;
+            }
+            $i++;
+        }
+        return $codigoCorrecto;
+    }
+    private function capacidadCorrecto($capacidad){  // 1 si hay puro numeros,  0 si hay signos o letras
+        $capacidadCorrecta =is_numeric($capacidad)+0; 
+        return $capacidadCorrecta;
     }
     public function getById($id)               //retorna un Ambiente por el ID
     {
