@@ -24,8 +24,8 @@ class CreateAulaTable extends Migration
             $table->string("codigo");
             $table->string("tipo");
             $table->text("caracteristicas");
-            $table->string("nombreAula");
             $table->string("ubicacion");
+            $table->string("imagen")->nullable($value=true);
             $table->timestamps();
         });
     }

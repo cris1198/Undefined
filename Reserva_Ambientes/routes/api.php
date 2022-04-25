@@ -25,3 +25,5 @@ Route::get('/ambientes/buscar','App\Http\Controllers\AmbienteController@search_a
 Route::put('/ambientes/{id}','App\Http\Controllers\AmbienteController@update');  //actualizar registros
 Route::delete('/ambientes/{id}','App\Http\Controllers\AmbienteController@destroy');  //eliminar registros
 Route::get('/ambientes/{id}','App\Http\Controllers\AmbienteController@getById'); //devuelve un Ambiente por el id
+
+Route::post('/ambientes','App\Http\Controllers\AmbienteController@store');   //agregar nueva

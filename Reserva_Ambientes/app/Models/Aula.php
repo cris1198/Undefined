@@ -11,7 +11,7 @@ class Aula extends Model
     public function administrador(){
         return $this->belongsTo(Administrador::class,'id_administrador');
     }
-
+    protected $fillable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
     protected $buscable = ['capacidad','codigo','tipo','caracteristicas','nombreAula','ubicacion'];
 
     public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
