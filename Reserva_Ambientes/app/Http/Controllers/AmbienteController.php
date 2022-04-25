@@ -51,6 +51,7 @@ class AmbienteController extends Controller
         $aula->caracteristicas = $request->caracteristicas;
         $aula->nombreAula = $request->nombreAula; 
         $aula->ubicacion = $request->ubicacion;
+        $aula->imagen = $request->imagen;
         $aula->save();                                   //guarda cambios
         return response()->json([                        //JSON con los ambientes
             'Respuesta' => 'Actualizado correctamente'
