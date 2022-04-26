@@ -12,7 +12,8 @@ class Aula extends Model
         return $this->belongsTo(Administrador::class,'id_administrador');
     }
 
-    protected $buscable = ['capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
+    protected $fillable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
+    protected $buscable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
 
     public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
 

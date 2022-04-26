@@ -26,8 +26,8 @@ class AmbienteController extends Controller
                  ], 500);
             }else{
                 $new_classroom = new Aula($request->all());
-                $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
-                $new_classroom->imagen= $path; // en la base de datos se guarda la direccion referenciando a la imagen
+                //$path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
+                //$new_classroom->imagen= $path; // en la base de datos se guarda la direccion referenciando a la imagen
                 $new_classroom->save();
 
         
