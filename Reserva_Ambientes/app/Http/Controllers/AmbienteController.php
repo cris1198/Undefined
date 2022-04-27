@@ -19,35 +19,42 @@ class AmbienteController extends Controller
         $codigoCorrecto = AmbienteController::codigoCorrecto($request->codigo);
         $caracCorrecto = AmbienteController::caracCorrecto($request->caracteristicas);
         $ubicCorrecto = AmbienteController::codigoCorrecto($request->ubicacion);
+        $imgCorrecto = $request->imagen;
 
-        if(!$capacidadCorrecto){
+        if( !$codigoCorrecto){
             return response()->json([   
-                'capacidad' => 0
+                'codigo' => 1
              ], 500);
         }else{
-            if( !$codigoCorrecto){
+            if(!$capacidadCorrecto){
                 return response()->json([   
-                    'codigo' => 1
+                    'capacidad' => 0
                  ], 500);
             }else{
-                if( !$caracCorrecto){
+                if( !$ubicCorrecto){
                     return response()->json([   
-                        'caracteristicas' => 2
+                        'ubicacion' => 3
                      ], 500);
                 }else{
-                    if(!$ubicCorrecto){
+                    if(!$caracCorrecto){
                         return response()->json([   
-                            'ubicacion' => 3
+                            'caracteristicas' => 2
                          ], 500);
                     }else{
-                        $new_classroom = new Aula($request->all());
-                        $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
-                        $url = Storage::url($path);    //poniendo storage
-                        $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
-                        $new_classroom->save();
-                        return response()->json([   
-                            'Respuesta' => 'Agregado Correctamente'
-                         ], 202);  
+                        if(!$imgCorrecto){
+                            return response()->json([   
+                                'imagen' => 4
+                             ], 500);
+                        }else{
+                            $new_classroom = new Aula($request->all());
+                            $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
+                            $url = Storage::url($path);    //poniendo storage
+                            $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
+                            $new_classroom->save();
+                            return response()->json([   
+                                'Respuesta' => 'Agregado Correctamente'
+                            ], 202);
+                        }  
                     }
                 }
             }
@@ -77,24 +84,24 @@ class AmbienteController extends Controller
         $caracCorrecto = AmbienteController::caracCorrecto($request->caracteristicas);
         $ubicCorrecto = AmbienteController::codigoCorrecto($request->ubicacion);
 
-        if(!$capacidadCorrecto){
+        if( !$codigoCorrecto){
             return response()->json([   
-                'capacidad' => 0
+                'codigo' => 1
              ], 500);
         }else{
-            if( !$codigoCorrecto){
+            if(!$capacidadCorrecto){
                 return response()->json([   
-                    'codigo' => 1
+                    'capacidad' => 0
                  ], 500);
             }else{
-                if( !$caracCorrecto){
+                if( !$ubicCorrecto){
                     return response()->json([   
-                        'caracteristicas' => 2
+                        'ubicacion' => 3
                      ], 500);
                 }else{
-                    if(!$ubicCorrecto){
+                    if(!$caracCorrecto){
                         return response()->json([   
-                            'ubicacion' => 3
+                            'caracteristicas' => 2
                          ], 500);
                     }else{
                         $aula->update($request->except('imagen'));                      //guarda cambios
@@ -117,8 +124,11 @@ class AmbienteController extends Controller
     }
     
     private function capacidadCorrecto($capacidad){  // 1 si hay puro numeros,  0 si hay signos o letras
-        $capacidadCorrecta =is_numeric($capacidad)+0; 
-        return $capacidadCorrecta;
+        if(strlen($capacidad)<4){
+            $capacidadCorrecta =is_numeric($capacidad)+0; 
+            return $capacidadCorrecta;
+        }
+        return $capacidadCorrecta = 0;
     }
     
     public function getById($id)               //retorna un Ambiente por el ID
@@ -130,13 +140,15 @@ class AmbienteController extends Controller
     private function codigoCorrecto($codigo){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
         $codigoCorrecto =true;
         $i = 0 ;
-        while($i < strlen($codigo) && $codigoCorrecto){
-            $car  = $codigo[$i];
-            if(!((ord($car)>= 48 && ord($car) <= 57) || (ord($car)>= 65 && ord($car)<=90) 
-                || (ord($car)>= 97 && ord($car)<=122) || ord($car)==35|| ord($car)==32)){
-                $codigoCorrecto = 0;
+        if( strlen($codigo)<20){
+            while($i < strlen($codigo) && $codigoCorrecto){
+                $car  = $codigo[$i];
+                if(!((ord($car)>= 48 && ord($car) <= 57) || (ord($car)>= 65 && ord($car)<=90) 
+                    || (ord($car)>= 97 && ord($car)<=122) || ord($car)==35|| ord($car)==32)){
+                    $codigoCorrecto = 0;
+                }
+                $i++;
             }
-            $i++;
         }
         return $codigoCorrecto;
     }
@@ -144,12 +156,14 @@ class AmbienteController extends Controller
     private function caracCorrecto($carac){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
         $caracCorrecto =true;
         $i = 0 ;
-        while($i < strlen($carac) && $caracCorrecto){
-            $car  = $carac[$i];
-            if(!((ord($car)>= 65 && ord($car)<=90) || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
-                $caracCorrecto = false;
+        if( strlen($carac)<20 && strlen($carac) > 5){
+            while($i < strlen($carac) && $caracCorrecto && strlen($carac)<30 ){
+                $car  = $carac[$i];
+                if(!((ord($car)>= 65 && ord($car)<=90) || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
+                    $caracCorrecto = false;
+                }
+                $i++;
             }
-            $i++;
         }
         return $caracCorrecto;
     }
