@@ -73,9 +73,17 @@ class Aula extends Model
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
-                        return $aulas = self::where('codigo', 'like', "%$buscar%")
+                        $aulas = self::where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
+
+                        if($aulas == '[]'){
+                            return response()->json([               
+                                    'Respuesta' => 0
+                                ], 505);
+                        }else{
+                            return $aulas;
+                        }
                     }
                 }
             }
