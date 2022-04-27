@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Aula;
+use Illuminate\Support\Facades\Storage;
 
 class AmbienteController extends Controller
 {
     public function index()                    //retorna todos los ambientes
     {
         $ambientes = Aula::all();
+
         return $ambientes;                     //JSON con los ambientes
     }
     public function store(Request $request)   {
@@ -26,8 +28,9 @@ class AmbienteController extends Controller
                  ], 500);
             }else{
                 $new_classroom = new Aula($request->all());
-                //$path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
-                //$new_classroom->imagen= $path; // en la base de datos se guarda la direccion referenciando a la imagen
+                $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
+                $url = Storage::url($path);    //poniendo storage
+                $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
                 $new_classroom->save();
 
         
@@ -36,7 +39,6 @@ class AmbienteController extends Controller
                  ], 202);  
             }
         }
-        
     }
     private function codigoCorrecto($codigo){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
         $codigoCorrecto =true;
