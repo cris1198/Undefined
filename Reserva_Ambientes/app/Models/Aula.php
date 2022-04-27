@@ -17,11 +17,13 @@ class Aula extends Model
 
     public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
 
+        $aulas = "";
+
         if($buscar){
             if($caracteristicas){
                 if($tipo){
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
@@ -29,7 +31,7 @@ class Aula extends Model
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
-                        return $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
+                        $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
@@ -37,14 +39,14 @@ class Aula extends Model
                     }
                 }else{
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
-                        return $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
+                        $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
@@ -53,21 +55,21 @@ class Aula extends Model
             }else{
                 if($tipo){
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
                         ->Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
-                        return $aulas = self::Where('tipo', 'like', "%$tipo%")
+                        $aulas = self::Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }
                 }else{
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
                         ->where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
@@ -76,14 +78,6 @@ class Aula extends Model
                         $aulas = self::where('codigo', 'like', "%$buscar%")
                         ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
-
-                        if($aulas == '[]'){
-                            return response()->json([               
-                                    'Respuesta' => 0
-                                ], 505);
-                        }else{
-                            return $aulas;
-                        }
                     }
                 }
             }
@@ -91,41 +85,42 @@ class Aula extends Model
             if($caracteristicas){
                 if($tipo){
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
                         ->get();
                     }else{
-                        return $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
+                        $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
                         ->get();
+                        
                     }
                 }else{
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
                         ->get();
                     }else{
-                        return $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
+                        $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->get();
                     }
                 }
             }else{
                 if($tipo){
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
                         ->Where('tipo', 'like', "%$tipo%")
                         ->get();
                     }else{
-                        return $aulas = self::where('tipo', 'like', "%$tipo%")
+                        $aulas = self::where('tipo', 'like', "%$tipo%")
                         ->get();
                     }
                 }else{
                     if($rangeDown && $rangeUp){
-                        return $aulas = self::where('capacidad', '<=', $rangeUp)
+                        $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
                         ->get();
                     }else{
@@ -135,6 +130,14 @@ class Aula extends Model
                     }
                 }
             }
+        }
+        
+        if($aulas == '[]'){
+            return response()->json([               
+                    'Respuesta' => 0
+                ], 505);
+        }else{
+            return $aulas;
         }
     }
 
