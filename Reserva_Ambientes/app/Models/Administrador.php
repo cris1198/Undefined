@@ -8,7 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Administrador extends Model
 {
     use HasFactory;
-    public function aulas(){
-        return $this->hasMany(Aula::class,'id');
-    }
+    
 }
