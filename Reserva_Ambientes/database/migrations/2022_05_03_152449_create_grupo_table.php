@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAulaTable extends Migration
+class CreateGrupoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,20 @@ class CreateAulaTable extends Migration
      */
     public function up()
     {
-        Schema::create('aulas', function (Blueprint $table) {
+        Schema::create('grupo', function (Blueprint $table) {
             $table->id();
             $table->foreignID("id_users")
                   ->nullable()
                   ->constrained("users")
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
-            $table->integer("capacidad");
-            $table->string("codigo");
-            $table->string("tipo");
-            $table->text("caracteristicas");
-            $table->string("ubicacion");
-            $table->string("imagen")->nullable($value=true);
+            $table->foreignID("id_materias")
+                  ->nullable()
+                  ->constrained("materia")
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+            $table->string("nombreGrupo");
+            $table->integer("cantidad");
             $table->timestamps();
         });
     }
@@ -37,6 +38,6 @@ class CreateAulaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('aula');
+        Schema::dropIfExists('grupo');
     }
 }

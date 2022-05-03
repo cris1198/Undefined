@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Aula extends Model
 {
     use HasFactory;
-    public function administrador(){
-        return $this->belongsTo(Administrador::class,'id_administrador');
+    public function users(){
+        return $this->belongsTo(User::class,'id_users');
     }
 
+    public function aulaVecinas(){
+        return $this->hasMany(AulaVecina::class,'id');
+    }
+    public function horarios(){
+        return $this->hasMany(Horario::class,'id');
+    }
     protected $fillable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
     protected $buscable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
 
