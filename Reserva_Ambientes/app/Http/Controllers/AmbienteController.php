@@ -140,7 +140,7 @@ class AmbienteController extends Controller
     private function codigoCorrecto($codigo){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
         $codigoCorrecto =true;
         $i = 0 ;
-        if( strlen($codigo)<20){
+        if((strlen($codigo))<20){
             while($i < strlen($codigo) && $codigoCorrecto){
                 $car  = $codigo[$i];
                 if(!((ord($car)>= 48 && ord($car) <= 57) || (ord($car)>= 65 && ord($car)<=90) 
@@ -149,6 +149,8 @@ class AmbienteController extends Controller
                 }
                 $i++;
             }
+        }else{
+            $codigoCorrecto = 0;
         }
         return $codigoCorrecto;
     }
@@ -156,7 +158,7 @@ class AmbienteController extends Controller
     private function caracCorrecto($carac){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
         $caracCorrecto =true;
         $i = 0 ;
-        if( strlen($carac)<20 && strlen($carac) > 5){
+        if(strlen($carac)<20 && strlen($carac) > 5){
             while($i < strlen($carac) && $caracCorrecto && strlen($carac)<30 ){
                 $car  = $carac[$i];
                 if(!((ord($car)>= 65 && ord($car)<=90) || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
@@ -164,6 +166,8 @@ class AmbienteController extends Controller
                 }
                 $i++;
             }
+        }else{
+            $caracCorrecto = false;
         }
         return $caracCorrecto;
     }

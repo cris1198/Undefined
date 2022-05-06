@@ -17,8 +17,6 @@ class Aula extends Model
 
     public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
 
-        $aulas = "";
-
         if($buscar){
             if($caracteristicas){
                 if($tipo){
@@ -28,13 +26,11 @@ class Aula extends Model
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
                         $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }
                 }else{
@@ -43,12 +39,10 @@ class Aula extends Model
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
                         $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }
                 }
@@ -59,12 +53,10 @@ class Aula extends Model
                         ->where('capacidad', '>=', $rangeDown)
                         ->Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
                         $aulas = self::Where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }
                 }else{
@@ -72,11 +64,9 @@ class Aula extends Model
                         $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
                         ->where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }else{
                         $aulas = self::where('codigo', 'like', "%$buscar%")
-                        ->orWhere('ubicacion', 'like', "%$buscar%")
                         ->get();
                     }
                 }
@@ -94,7 +84,6 @@ class Aula extends Model
                         $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
                         ->Where('tipo', 'like', "%$tipo%")
                         ->get();
-                        
                     }
                 }else{
                     if($rangeDown && $rangeUp){
