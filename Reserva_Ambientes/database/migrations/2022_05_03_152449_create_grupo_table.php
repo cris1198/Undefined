@@ -13,7 +13,7 @@ class CreateGrupoTable extends Migration
      */
     public function up()
     {
-        Schema::create('grupo', function (Blueprint $table) {
+        Schema::create('grupos', function (Blueprint $table) {
             $table->id();
             $table->foreignID("id_users")
                   ->nullable()
@@ -22,7 +22,7 @@ class CreateGrupoTable extends Migration
                   ->cascadeOnDelete();
             $table->foreignID("id_materias")
                   ->nullable()
-                  ->constrained("materia")
+                  ->constrained("materias")
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
             $table->string("nombreGrupo");

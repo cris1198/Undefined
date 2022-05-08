@@ -13,7 +13,7 @@ class CreateAulavecinaTable extends Migration
      */
     public function up()
     {
-        Schema::create('aulavecina', function (Blueprint $table) {
+        Schema::create('aulavecinas', function (Blueprint $table) {
             $table->id();
             $table->foreignID("id_aulas")
                   ->nullable()
