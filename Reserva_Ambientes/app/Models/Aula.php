@@ -18,8 +18,8 @@ class Aula extends Model
     public function horarios(){
         return $this->hasMany(Horario::class,'id');
     }
-    protected $fillable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
-    protected $buscable = ['id_administrador','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
+    protected $fillable = ['id_users','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
+    protected $buscable = ['id_users','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
 
     public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
 
@@ -30,12 +30,12 @@ class Aula extends Model
                         $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
-                        ->Where('tipo', 'like', "%$tipo%")
+                        ->where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->get();
                     }else{
                         $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
-                        ->Where('tipo', 'like', "%$tipo%")
+                        ->where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->get();
                     }
@@ -57,11 +57,11 @@ class Aula extends Model
                     if($rangeDown && $rangeUp){
                         $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
-                        ->Where('tipo', 'like', "%$tipo%")
+                        ->where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->get();
                     }else{
-                        $aulas = self::Where('tipo', 'like', "%$tipo%")
+                        $aulas = self::where('tipo', 'like', "%$tipo%")
                         ->where('codigo', 'like', "%$buscar%")
                         ->get();
                     }
@@ -84,11 +84,11 @@ class Aula extends Model
                         $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown) 
                         ->where('caracteristicas', 'like', "%$caracteristicas%")
-                        ->Where('tipo', 'like', "%$tipo%")
+                        ->where('tipo', 'like', "%$tipo%")
                         ->get();
                     }else{
                         $aulas = self::where('caracteristicas', 'like', "%$caracteristicas%")
-                        ->Where('tipo', 'like', "%$tipo%")
+                        ->where('tipo', 'like', "%$tipo%")
                         ->get();
                     }
                 }else{
@@ -107,7 +107,7 @@ class Aula extends Model
                     if($rangeDown && $rangeUp){
                         $aulas = self::where('capacidad', '<=', $rangeUp)
                         ->where('capacidad', '>=', $rangeDown)
-                        ->Where('tipo', 'like', "%$tipo%")
+                        ->where('tipo', 'like', "%$tipo%")
                         ->get();
                     }else{
                         $aulas = self::where('tipo', 'like', "%$tipo%")
@@ -119,9 +119,7 @@ class Aula extends Model
                         ->where('capacidad', '>=', $rangeDown)
                         ->get();
                     }else{
-                        return response()->json([               
-                            'Respuesta' => 0
-                        ], 505); ;
+                        $aulas = self::all();
                     }
                 }
             }

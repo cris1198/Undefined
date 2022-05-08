@@ -29,4 +29,23 @@ class Reserva extends Model
     public function aulas(){
         return $this->belongsTo(Aula::class,'id_aulas');
     }
+
+    public static function searchByUserId($userId=''){
+        return self::where('id_users', 'like', $userId)
+                ->get();
+    }
+
+    public static function Aceptados($userId=''){
+        return self::where('id_users', 'like', $userId)
+                ->where('aceptadoRechazado', 'like', 1)
+                ->ordeBy('fechaReserva')
+                ->get();
+    }
+
+    public static function Rechazados($userId=''){
+        return self::where('id_users', 'like', $userId)
+                ->where('aceptadoRechazado', 'like', 0)
+                ->ordeBy('fechaReserva')
+                ->get();
+    }
 }

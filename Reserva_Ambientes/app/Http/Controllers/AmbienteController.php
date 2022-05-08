@@ -18,7 +18,7 @@ class AmbienteController extends Controller
         $capacidadCorrecto = AmbienteController::capacidadCorrecto($request->capacidad);
         $codigoCorrecto = AmbienteController::codigoCorrecto($request->codigo);
         $caracCorrecto = AmbienteController::caracCorrecto($request->caracteristicas);
-        $ubicCorrecto = AmbienteController::codigoCorrecto($request->ubicacion);
+        $ubicCorrecto = AmbienteController::caracCorrecto($request->ubicacion);
         $imgCorrecto = $request->imagen;
 
         if( !$codigoCorrecto){
@@ -82,7 +82,7 @@ class AmbienteController extends Controller
         $capacidadCorrecto = AmbienteController::capacidadCorrecto($request->capacidad);
         $codigoCorrecto = AmbienteController::codigoCorrecto($request->codigo);
         $caracCorrecto = AmbienteController::caracCorrecto($request->caracteristicas);
-        $ubicCorrecto = AmbienteController::codigoCorrecto($request->ubicacion);
+        $ubicCorrecto = AmbienteController::caracCorrecto($request->ubicacion);
 
         if( !$codigoCorrecto){
             return response()->json([   
@@ -137,14 +137,14 @@ class AmbienteController extends Controller
         return $ambiente;                      //JSON con los ambientes
     }
 
-    private function codigoCorrecto($codigo){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
+    private function codigoCorrecto($codigo){ //0 si el codigo contiene caracteres no alfanuericos, 1 correcto
         $codigoCorrecto =true;
         $i = 0 ;
-        if((strlen($codigo))<20){
+        if(strlen($codigo)<16 && strlen($codigo) > 2){
             while($i < strlen($codigo) && $codigoCorrecto){
                 $car  = $codigo[$i];
                 if(!((ord($car)>= 48 && ord($car) <= 57) || (ord($car)>= 65 && ord($car)<=90) 
-                    || (ord($car)>= 97 && ord($car)<=122) || ord($car)==35|| ord($car)==32)){
+                    || (ord($car)>= 97 && ord($car)<=122) || ord($car)==35 || ord($car)==32)){
                     $codigoCorrecto = 0;
                 }
                 $i++;
@@ -155,13 +155,14 @@ class AmbienteController extends Controller
         return $codigoCorrecto;
     }
 
-    private function caracCorrecto($carac){ //0 si el codgio contiene caracteres no alfanuericos, 1 correcto
+    private function caracCorrecto($carac){ //0 si el caracteristicas y ubicacion contiene caracteres no alfanuericos, 1 correcto
         $caracCorrecto =true;
         $i = 0 ;
-        if(strlen($carac)<20 && strlen($carac) > 5){
+        if(strlen($carac)<41 && strlen($carac) > 6){
             while($i < strlen($carac) && $caracCorrecto && strlen($carac)<30 ){
                 $car  = $carac[$i];
-                if(!((ord($car)>= 65 && ord($car)<=90) || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
+                if(!(((ord($car)>= 48 && ord($car) <= 57) || ord($car)>= 65 && ord($car)<=90)
+                 || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
                     $caracCorrecto = false;
                 }
                 $i++;
