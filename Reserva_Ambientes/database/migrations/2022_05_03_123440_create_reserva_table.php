@@ -30,8 +30,7 @@ class CreateReservaTable extends Migration
             $table->string("grupo");
             $table->integer("cantidadEstudiantes");
             $table->date("fechaReserva");
-            $table->integer("horaInicio");
-            $table->integer("horaFin");
+            $table->integer("periodo");
             $table->integer("cantidadPeriodo")->nullable($value=true);
             $table->integer("aceptadoRechazado")->nullable($value=true);
             $table->string("razon")->nullable($value=true);

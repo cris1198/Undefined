@@ -30,7 +30,7 @@ Route::post('/reserva', 'ReservaController@store'); //agregar una reserva
 Route::put('/reserva/Aceptar/{id}', 'ReservaController@acceptReservation'); //aceptar una reserva
 Route::put('/reserva/Rechazar/{id}', 'ReservaController@rejectReservation'); //rechazar una reserva
 Route::get('/reserva/{id}', 'ReservaController@getById'); //devuelve una reserva por su id
-Route::get('/reserva/User/{id}', 'ReservaController@etByUserId'); //devuelve una reserva por el usuario quien reserva
+Route::get('/reserva/User/{id}', 'ReservaController@getByUserId'); //devuelve una reserva por el usuario quien reserva
 Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas aceptadas de un usuario
 Route::get('/reserva/Rechazar/{id}', 'ReservaController@getRejected'); //devuelve las reservas rechazadas de un usuario
 
