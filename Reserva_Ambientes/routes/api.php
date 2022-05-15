@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('registro','userController@registro');
+Route::post('login','userController@login');
+Route::group(['middleware' => ["auth:sanctum"]], function(){
+    //rutas
+    Route::get('perfil','userController@perfil');
+    Route::get('logout','userController@logout');
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
