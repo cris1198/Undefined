@@ -137,6 +137,24 @@ class ReservaController extends Controller
         return $reservas;
     }
 
+    public function getToReserve(){  //Obtiene las reservas aceptadas
+        $reservas = Reserva::porReservar();
+        return $reservas;
+    }
+
+    public function getAcceptAndReject($id){           //Obtiene las reservas rechazados
+        $reservas = Reserva::AcceptAndReject($id);
+        return $reservas;
+    }
+    
+
+    public function getAvailablePeriods(Request $request, $id){
+        Aula::findOrFail($id);
+        $fecha = $request->input('fecha');
+        $reservas = Reserva::getHorario ($id, $fecha);
+        return $reservas;
+    }
+
     private function cantidadCorrecto($capacidad){  // 1 si hay puro numeros,  0 si hay signos o letras
         if(strlen($capacidad)<4){
             $capacidadCorrecta =is_numeric($capacidad)+0;
@@ -224,4 +242,6 @@ class ReservaController extends Controller
         }
         return $permitido;
     }
+
+
 }
