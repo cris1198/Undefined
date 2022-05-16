@@ -48,8 +48,33 @@ class Reserva extends Model
                 ->get();
     }
 
-    public static function getByAulaId($aulaId=''){
+    public static function getByAulaId($aulaId='',$fecha='',$periodo=''){
         return self::where('id_aulas', 'like', $aulaId)
+                ->where('fechaReserva', 'like', $fecha)
+                ->where('periodo', 'like', $periodo)
                 ->get();
     }
+    
+    public static function getHorario($aulaId='', $fecha=''){
+        return self::where('id_aulas', 'like', $aulaId)
+                ->where('fechaReserva', 'like', $fecha)
+                ->get();
+    }
+
+    public static function porReservar(){
+        return self::whereNull('aceptadoRechazado')
+                ->orderBy('fechaReserva', 'DESC')
+                ->get();
+    }
+
+    public static function AcceptAndReject($userId=''){
+        return self::where('id_users', 'like', $userId)
+                ->where('aceptadoRechazado', 'like', 0)
+                ->orWhere('aceptadoRechazado', 'like', 1)
+                ->orderBy('fechaReserva', 'DESC')
+                ->take(5)
+                ->get();
+    }
+    
+    
 }
