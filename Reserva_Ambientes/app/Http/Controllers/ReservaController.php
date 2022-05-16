@@ -33,12 +33,14 @@ class ReservaController extends Controller
     {
         $reserva = Reserva::findOrFail($id); 
         $id_aula = $reserva->id_aulas;
+        $fecha = $reserva->fechaReserva;
+        $periodo = $reserva->periodo;
         $reserva->aceptadoRechazado = 1;         //1 == Aceptado y 0 == Rechazado
         $reserva->save();
 
         $reservas = Reserva::getByAulaId($id_aula); //Rechazando reservas con el mismo id
         foreach ($reservas as $reservaAula) {
-            if($reservaAula->id != $id){
+            if($reservaAula->id != $id && $reservaAula->fechaReserva != $fecha && $reservaAula->periodo != $periodo){
                 $reservaAula->aceptadoRechazado = 0;
                 $reservaAula->save();
             }
