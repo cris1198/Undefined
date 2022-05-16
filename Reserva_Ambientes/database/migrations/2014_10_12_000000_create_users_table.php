@@ -18,8 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('apellido');
             $table->string('email')->unique();
+            $table->string('esAdmin');
             $table->string('password');
-            $table->string('esAdmin')->default('no');
+            
+            //$table->string('esAdmin')->default('no');
     
         });
     }

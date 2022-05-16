@@ -19,6 +19,7 @@ class userController extends Controller
         $user->name = $request->name;
         $user->apellido = $request->apellido;
         $user->email = $request->email;
+        $user->esAdmin = $request->esAdmin;
         $user->password =Hash::make($request->password) ;
         $user->save();
         return response()->json([
