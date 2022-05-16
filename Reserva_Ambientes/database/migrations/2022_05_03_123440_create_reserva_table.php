@@ -28,6 +28,8 @@ class CreateReservaTable extends Migration
             $table->string("codigo");
             $table->string("materia");
             $table->string("grupo");
+            $table->string("motivo");
+            $table->string("observaciones")->nullable($value=true);
             $table->integer("cantidadEstudiantes");
             $table->date("fechaReserva");
             $table->integer("periodo");
