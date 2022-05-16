@@ -48,8 +48,10 @@ class Reserva extends Model
                 ->get();
     }
 
-    public static function getByAulaId($aulaId=''){
+    public static function getByAulaId($aulaId='',$fecha='',$periodo=''){
         return self::where('id_aulas', 'like', $aulaId)
+                ->where('fechaReserva', 'like', $fecha)
+                ->where('periodo', 'like', $periodo)
                 ->get();
     }
     
