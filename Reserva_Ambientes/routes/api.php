@@ -57,7 +57,7 @@ Route::get('/reserva/{id}', 'ReservaController@getById'); //devuelve una reserva
 Route::get('/reserva/User/{id}', 'ReservaController@getByUserId'); //devuelve una reserva por el usuario quien reserva
 Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas aceptadas de un usuario
 Route::get('/reserva/Rechazar/{id}', 'ReservaController@getRejected'); //devuelve las reservas rechazadas de un usuario
-Route::get('/reserva/periodos{id}', 'ReservaController@getAvailablePeriods'); //devuelve los ambientes reservados en esa fecha especifica
+Route::post('/reserva/periodos/{id}', 'ReservaController@getAvailablePeriods'); //devuelve los ambientes reservados en esa fecha especifica
 
 
 
