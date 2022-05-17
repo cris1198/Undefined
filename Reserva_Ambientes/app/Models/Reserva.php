@@ -60,6 +60,7 @@ class Reserva extends Model
     public static function getHorario($aulaId='', $fecha=''){
         return self::where('id_aulas', 'like', $aulaId)
                 ->where('fechaReserva', 'like', $fecha)
+                ->where('aceptadoRechazado', 'like', 1)
                 ->get();
     }
 
