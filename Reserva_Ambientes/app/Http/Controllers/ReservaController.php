@@ -152,7 +152,8 @@ class ReservaController extends Controller
 
     public function getAvailablePeriods(Request $request, $id){
         Aula::findOrFail($id);
-        $fecha = $request->input('fecha');
+        //$fecha = $request->input('fecha');
+        $fecha = $request->fecha;
         $reservas = Reserva::getHorario ($id, $fecha);
         return $reservas;
     }
