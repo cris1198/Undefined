@@ -98,10 +98,10 @@ class ReservaController extends Controller
                             'cantidad' => 2
                          ], 500);
                     }else{
-                        if(!$cantidadPermitida){
-                            $aulasRecomendadas = Aula::recomendar($request->cantidadEstudiantes);
-                            return $aulasRecomendadas;
-                        }else{
+                        /* if(!$cantidadPermitida){ */
+                           /*  $aulasRecomendadas = Aula::recomendar($request->cantidadEstudiantes);
+                            return $aulasRecomendadas; */
+                        /* }else{ */
                             if(!$periodoCorrecto){
                                 return response()->json([   
                                     'periodo' => 4
@@ -121,12 +121,12 @@ class ReservaController extends Controller
                                         $reserva1 = new Reserva($request->all());
                                         $reserva1->observaciones = 'no hay observaciones';
                                         //$is_user = Auth::user()->id;
-                                        $is_user = auth()->user()->id;
-                                        $reserva1->id_users = $is_user;
+                                        //$is_user = auth()->user()->id;
+                                        //$reserva1->id_users = $is_user;
                                         $reserva1->save();
                                         return response()->json([   
                                             'Respuesta' => 'Reserva Creada Correctamente',  //JSON con la respuesta
-                                            "data" => auth()->user()
+                                            //"data" => auth()->user()
                                         ], 202); 
 
                                         // $new_classroom = new Aula($request->all());
@@ -140,7 +140,7 @@ class ReservaController extends Controller
                                     }
                                 }
                             }
-                        }
+                       /*  } */
                     }
                 }
             }
@@ -160,6 +160,21 @@ class ReservaController extends Controller
 
     public function getToReserve(){  //Obtiene las reservas aceptadas
         $reservas = Reserva::porReservar();
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva) { 
+                    $j=1;
+                    while($j < 12){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+              
+
         return $reservas;
     }
 
