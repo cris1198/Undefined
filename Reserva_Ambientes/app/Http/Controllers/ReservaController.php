@@ -171,9 +171,64 @@ class ReservaController extends Controller
 
     public function getAvailablePeriods(Request $request, $id){
         Aula::findOrFail($id);
-        $fecha = $request->input('fecha');
+        //$fecha = $request->input('fecha');
+        $fecha = $request->fecha;
         $reservas = Reserva::getHorario ($id, $fecha);
-        return $reservas;
+        $periodosModificados= array();
+        $periodosDisponibles = array("6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+        $periodosUtilizados = array();
+        $numPeriodo = 1;
+
+        foreach($periodosDisponibles as $periodo){
+            array_push($periodosModificados, array("periodo" => $periodo, "status" => "0", "numPeriodo" => $numPeriodo));
+            $numPeriodo=$numPeriodo+1;
+        }
+        
+        foreach ($reservas as $reserva) {  
+            
+            if($reserva->periodo == 1){
+                array_push($periodosUtilizados, array("periodo" => "6:45 - 8:15", "status" => "1", "numPeriodo" => 1));
+            }
+            if($reserva->periodo == 2){
+                array_push($periodosUtilizados, array("periodo" => "8:15 - 9:45", "status" => "1", "numPeriodo" => 2));
+            }
+            if($reserva->periodo == 3){
+                array_push($periodosUtilizados, array("periodo" => "9:45 - 11:15", "status" => "1", "numPeriodo" => 3));
+            }
+            if($reserva->periodo == 4){
+                array_push($periodosUtilizados, array("periodo" => "11:15 - 12:45", "status" => "1", "numPeriodo" => 4));
+            }
+            if($reserva->periodo == 5){
+                array_push($periodosUtilizados, array("periodo" => "12:45 - 14:15", "status" => "1", "numPeriodo" => 5));
+            }
+            if($reserva->periodo == 6){
+                array_push($periodosUtilizados, array("periodo" => "14:15 - 15:45", "status" => "1", "numPeriodo" => 6));
+            }
+            if($reserva->periodo == 7){
+                array_push($periodosUtilizados, array("periodo" => "15:45 - 17:15", "status" => "1", "numPeriodo" => 7));
+            }
+            if($reserva->periodo == 8){
+                array_push($periodosUtilizados, array("periodo" => "17:15 - 18:45", "status" => "1", "numPeriodo" => 8));
+            }
+            if($reserva->periodo == 9){
+                array_push($periodosUtilizados, array("periodo" => "18:45 - 20:15", "status" => "1", "numPeriodo" => 9));
+            }
+            if($reserva->periodo == 10){
+                array_push($periodosUtilizados, array("periodo" => "20:15 - 21:45", "status" => "1", "numPeriodo" => 10));
+            }    
+        }
+
+        foreach ($periodosUtilizados as $periodoU) {
+            $i=0;
+            foreach ($periodosModificados as $periodoM) {
+                if ($periodoU["periodo"] == $periodoM["periodo"]) {
+                    $periodosModificados[$i][ "status" ] = "1";
+                }
+                $i=$i+1;
+            }
+        }  
+
+        return json_encode($periodosModificados);
     }
 
     private function cantidadCorrecto($capacidad){  // 1 si hay puro numeros,  0 si hay signos o letras
