@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Aula;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 
 class ReservaController extends Controller
 {
@@ -69,11 +71,12 @@ class ReservaController extends Controller
         $codigoCorrecto = ReservaController::codigoCorrecto($request->codigo);
         $materiaCorrecto = ReservaController::materiaCorrecto($request->materia);
         $grupoCorrecto = ReservaController::grupoCorrecto($request->grupo);
+        
         $cantidadCorrecto = ReservaController::cantidadCorrecto($request->cantidadEstudiantes);
         $cantidadPermitida = ReservaController::cantidadPermitidaAula($request->cantidadEstudiantes,$request->id_aulas);
         $periodoCorrecto = ReservaController::cantidadCorrecto($request->periodo);
         $cantidadPeriodoCorrecto = ReservaController::cantidadCorrecto($request->cantidadPeriodo);
-        $razonCorrecto = ReservaController::razonCorrecto($request->razon);
+        $razonCorrecto = ReservaController::razonCorrecto($request->motivo);
 
         if(!$codigoCorrecto){
             return response()->json([   
@@ -114,10 +117,26 @@ class ReservaController extends Controller
                                             'razon' => 6
                                         ], 500);
                                     }else{
-                                        (new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
+                                        //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
+                                        $reserva1 = new Reserva($request->all());
+                                        $reserva1->observaciones = 'no hay observaciones';
+                                        //$is_user = Auth::user()->id;
+                                        $is_user = auth()->user()->id;
+                                        $reserva1->id_users = $is_user;
+                                        $reserva1->save();
                                         return response()->json([   
-                                            'Respuesta' => 'Reserva Creada Correctamente'  //JSON con la respuesta
+                                            'Respuesta' => 'Reserva Creada Correctamente',  //JSON con la respuesta
+                                            "data" => auth()->user()
                                         ], 202); 
+
+                                        // $new_classroom = new Aula($request->all());
+                                        // $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
+                                        // $url = Storage::url($path);    //poniendo storage
+                                        // $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
+                                        // $new_classroom->save();
+
+
+
                                     }
                                 }
                             }
