@@ -53,10 +53,11 @@ class ReservaController extends Controller
         ], 202);                                 //JSON con la respuesta
     }
 
-    public function rejectReservation($id)       //Cambia el estado de rechazado a Aceptado
+    public function rejectReservation(Request $request, $id)       //Cambia el estado de rechazado a Aceptado
     {
         $reserva = Reserva::findOrFail($id); 
-        $reserva->aceptadoRechazado = 0;         //1 == Aceptado y 0 == Rechazado
+        $reserva->aceptadoRechazado = 0;
+        $reserva->razon = $request->razon;         //1 == Aceptado y 0 == Rechazado
         $reserva->save();
         
         return response()->json([   
@@ -165,7 +166,7 @@ class ReservaController extends Controller
             $i=0;
                 foreach ($reservas as $reserva) { 
                     $j=1;
-                    while($j < 12){
+                    while($j < 11){
                         if ($reserva["periodo"] == $j) {
                             $reservas[$i]["periodo"] = $periodosDisponibles[$j];
                         }
