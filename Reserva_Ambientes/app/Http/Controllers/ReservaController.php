@@ -181,6 +181,20 @@ class ReservaController extends Controller
 
     public function getAcceptAndReject($id){           //Obtiene las reservas rechazados
         $reservas = Reserva::AcceptAndReject($id);
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva) { 
+                    $j=1;
+                    while($j < 11){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+
         return $reservas;
     }
     
