@@ -166,9 +166,11 @@ class ReservaController extends Controller
             $i=0;
                 foreach ($reservas as $reserva) { 
                     $j=1;
-                    while($j < 11){
+                    $bandera = true;
+                    while($j < 11 && $bandera){
                         if ($reserva["periodo"] == $j) {
                             $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
                         }
                         $j=$j+1;
                     }
@@ -186,9 +188,11 @@ class ReservaController extends Controller
             $i=0;
                 foreach ($reservas as $reserva) { 
                     $j=1;
-                    while($j < 11){
+                    $bandera = true;
+                    while($j < 11 && $bandera){
                         if ($reserva["periodo"] == $j) {
                             $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
                         }
                         $j=$j+1;
                     }
