@@ -60,19 +60,21 @@ class ReservaController extends Controller
         ], 202);                                 //JSON con la respuesta
     }
     
-    public function rejectReservation($id)       //Cambia el estado de rechazado a Aceptado
+    // public function rejectReservation($id)  {
+
+    // }     //Cambia el estado de rechazado a Aceptado
+    public function rejectReservation(Request $request, $id)       //Cambia el estado de rechazado a Aceptado
     {
         $reserva = Reserva::findOrFail($id); 
-        $reserva->aceptadoRechazado = 0;         //1 == Aceptado y 0 == Rechazado
+        $reserva->aceptadoRechazado = 0;
+        $reserva->razon = $request->razon;         //1 == Aceptado y 0 == Rechazado
         $reserva->save();
-
         Mail::to($reserva->email)->send(new TestMail($reserva)); 
-
         return response()->json([   
             'Respuesta' => 'Reserva Rechazada Correctamente'
         ], 202);                                 //JSON con la respuesta
     }
-
+   
     public function store(Request $request){               //Crea una Reserva
         
         User::findOrFail($request->id_users); 
@@ -107,10 +109,10 @@ class ReservaController extends Controller
                             'cantidad' => 2
                          ], 500);
                     }else{
-                        if(!$cantidadPermitida){
-                            $aulasRecomendadas = Aula::recomendar($request->cantidadEstudiantes);
-                            return $aulasRecomendadas;
-                        }else{
+                        /* if(!$cantidadPermitida){ */
+                           /*  $aulasRecomendadas = Aula::recomendar($request->cantidadEstudiantes);
+                            return $aulasRecomendadas; */
+                        /* }else{ */
                             if(!$periodoCorrecto){
                                 return response()->json([   
                                     'periodo' => 4
@@ -149,7 +151,7 @@ class ReservaController extends Controller
                                     }
                                 }
                             }
-                        }
+                       /*  } */
                     }
                 }
             }
@@ -194,11 +196,40 @@ class ReservaController extends Controller
 
     public function getToReserve(){  //Obtiene las reservas aceptadas
         $reservas = Reserva::porReservar();
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva) { 
+                    $j=1;
+                    while($j < 11){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+              
+
         return $reservas;
     }
 
     public function getAcceptAndReject($id){           //Obtiene las reservas rechazados
         $reservas = Reserva::AcceptAndReject($id);
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva) { 
+                    $j=1;
+                    while($j < 11){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+
         return $reservas;
     }
     

@@ -52,7 +52,7 @@ class AmbienteController extends Controller
                             $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
                             $new_classroom->save();
                             return response()->json([   
-                                'Respuesta' => 'Agregado Correctamente'
+                                'ReFspuesta' => 'Agregado Correctamente'
                             ], 202);
                         }  
                     }
