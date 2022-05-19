@@ -6,10 +6,13 @@ use App\Models\Reserva;
 use Illuminate\Http\Request;
 
 use App\Models\Aula;
+use App\Models\Materia;
+use App\Models\Grupo;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 class ReservaController extends Controller
 {
     public function index()                    //retorna todos las Reservas
@@ -47,18 +50,24 @@ class ReservaController extends Controller
                 $reservaAula->save();
             }
         }
-
+        $details =[
+            'title' => 'Confirmacion de reserva de aula',
+            'body' => 'aqui porngo las variables'
+        ];
+        Mail::to($reserva->email)->send(new TestMail($reserva)); // a donde enviaremos el correo de prueba
         return response()->json([   
             'Respuesta' => 'Reserva Aceptada Correctamente'
         ], 202);                                 //JSON con la respuesta
     }
-
+    
     public function rejectReservation($id)       //Cambia el estado de rechazado a Aceptado
     {
         $reserva = Reserva::findOrFail($id); 
         $reserva->aceptadoRechazado = 0;         //1 == Aceptado y 0 == Rechazado
         $reserva->save();
-        
+
+        Mail::to($reserva->email)->send(new TestMail($reserva)); 
+
         return response()->json([   
             'Respuesta' => 'Reserva Rechazada Correctamente'
         ], 202);                                 //JSON con la respuesta
@@ -119,14 +128,14 @@ class ReservaController extends Controller
                                     }else{
                                         //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
                                         $reserva1 = new Reserva($request->all());
-                                        $reserva1->observaciones = 'no hay observaciones';
+                                        $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->grupo, $request->materia, $request->cantidadEstudiantes, $request->id_aulas);
                                         //$is_user = Auth::user()->id;
-                                        $is_user = auth()->user()->id;
-                                        $reserva1->id_users = $is_user;
+                                        //$is_user = auth()->user()->id;
+                                        //$reserva1->id_users = $is_user;
                                         $reserva1->save();
                                         return response()->json([   
                                             'Respuesta' => 'Reserva Creada Correctamente',  //JSON con la respuesta
-                                            "data" => auth()->user()
+                                            //"data" => auth()->user()
                                         ], 202); 
 
                                         // $new_classroom = new Aula($request->all());
@@ -152,7 +161,32 @@ class ReservaController extends Controller
         $reservas = Reserva::Aceptados($id);
         return $reservas;
     }
-
+    //id_user   materia     grupo  cantidadEstudaintes
+    public function observaciones($ids, $nombremateria,$g, $cant, $idau){
+        $obs = "";
+        $materia = Materia::where("nombreMateria","=",$nombremateria)->first();
+       
+        if(isset($materia->id)){
+            $grupo = Grupo::where("id_materias","=",$materia->id)->first();
+            if(isset($grupo->id)){
+                if($grupo->id_users ==$ids){
+                    $aulaa = Aula::where("id","=",$idau)->first();
+                    if($cant <= $aulaa->capacidad){
+                        $obs = "No hay observaciones";
+                    }else{
+                        $obs = "La cantidad de alumnos sobrepasa a la cantidad del total del aula";
+                    }
+                }else{
+                    $obs = "El grupo no le corresponde";
+                }
+            }else{
+                $obs="El grupo no existe";
+            }
+        }else{
+            $obs = "La materia que solicita no existe";
+        }
+        return $obs;
+    }
     public function getRejected($id){           //Obtiene las reservas rechazados
         $reservas = Reserva::Rechazados($id);
         return $reservas;

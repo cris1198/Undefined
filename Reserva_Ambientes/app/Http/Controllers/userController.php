@@ -41,7 +41,11 @@ class userController extends Controller
                 return response()->json([
                     "status" => 1,
                     "msg" => "usuario logueado exitosamente",
-                    "access_token" => $token
+                    "access_token" => $token,
+                    "email" => $user->email,
+                    "name" => $user->name,
+                    "apellido" => $user->apellido,
+                    "esAdmin" => $user->esAdmin,
                 ]);
         
            }else{
