@@ -26,6 +26,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function(){
 
 //Route::group(['middleware' => ["auth:sanctum",'docente']], function(){
     Route::get('/logout','userController@logout');
+    
     Route::post('/reserva', 'ReservaController@store'); //agregar una reserva docente
     Route::get('/reserva/User/{id}', 'ReservaController@getByUserId'); //devuelve una reserva por el usuario quien reserva docente
     Route::get('/reserva/Rechazar/{id}', 'ReservaController@getRejected'); //devuelve las reservas rechazadas de un usuario docente 
