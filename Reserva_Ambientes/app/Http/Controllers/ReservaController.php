@@ -47,14 +47,14 @@ class ReservaController extends Controller
         foreach ($reservas as $reservaAula) {
             if($reservaAula->id != $id){
                 $reservaAula->aceptadoRechazado = 0;
-                $reservaAula->save();
+                $reservaAula->razon = "El horario y fecha que solicita para la reserva ya esta ocupado";
+                $reservaAula->save(); 
+                $usuario = User::where("id","=",$reserva->id_users)->first();  
+                Mail::to($usuario->email)->send(new TestMail($reserva));
             }
         }
-        $details =[
-            'title' => 'Confirmacion de reserva de aula',
-            'body' => 'aqui porngo las variables'
-        ];
-        Mail::to($reserva->email)->send(new TestMail($reserva)); // a donde enviaremos el correo de prueba
+        $usuario = User::where("id","=",$reserva->id_users)->first();
+        Mail::to($usuario->email)->send(new TestMail($reserva)); // a donde enviaremos el correo de prueba
         return response()->json([   
             'Respuesta' => 'Reserva Aceptada Correctamente'
         ], 202);                                 //JSON con la respuesta
@@ -69,7 +69,8 @@ class ReservaController extends Controller
         $reserva->aceptadoRechazado = 0;
         $reserva->razon = $request->razon;         //1 == Aceptado y 0 == Rechazado
         $reserva->save();
-        Mail::to($reserva->email)->send(new TestMail($reserva)); 
+        $usuario = User::where("id","=",$reserva->id_users)->first();
+        Mail::to($usuario->email)->send(new TestMail($reserva)); 
         return response()->json([   
             'Respuesta' => 'Reserva Rechazada Correctamente'
         ], 202);                                 //JSON con la respuesta
@@ -140,12 +141,6 @@ class ReservaController extends Controller
                                             //"data" => auth()->user()
                                         ], 202); 
 
-                                        // $new_classroom = new Aula($request->all());
-                                        // $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
-                                        // $url = Storage::url($path);    //poniendo storage
-                                        // $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
-                                        // $new_classroom->save();
-
 
 
                                     }
@@ -164,7 +159,7 @@ class ReservaController extends Controller
         return $reservas;
     }
     //id_user   materia     grupo  cantidadEstudaintes
-    public function observaciones($ids, $nombremateria,$g, $cant, $idau){
+    public function observaciones($ids,$g, $nombremateria, $cant, $idau){
         $obs = "";
         $materia = Materia::where("nombreMateria","=",$nombremateria)->first();
        

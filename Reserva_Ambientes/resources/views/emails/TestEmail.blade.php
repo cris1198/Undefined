@@ -62,15 +62,14 @@
             Hora de reserva: 20:15 - 21:45
             @endif
 
-        <h2>
         </h2>
+        <h2>
             Motivo de reserva: {{$details22->motivo}}
         </h2>
         <h2>
             Materia: {{$details22->materia}}
         </h2> 
-    @endif
-    @if($details22->aceptadoRechazado === 0)
+        @elseif($details22->aceptadoRechazado === 0)
         <h1>
            Su solicitud de reserva a sido RECHAZADO
         </h1>
@@ -78,9 +77,8 @@
 
             Razon de rechazo: {{$details22->razon}}
         </h2>
-        <h2> Detalles de reserva:</h2>
         <h2>
-            Detalles
+            Detalles:
         </h2>
         <h2>
             Codigo de aula: {{ $details22->codigo }} 
@@ -127,6 +125,7 @@
 
             @if($details22->periodo === 7)
             Hora de reserva: 20:15 - 21:45
+            @endif
     @endif
     
    
