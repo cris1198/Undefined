@@ -1,0 +1,21 @@
+*, *:after, *:before {
+    box-sizing: border-box;
+  }
+
+.mensaje{
+    background-blend-mode: multiply;
+    background-color: initial;
+    background-repeat: no-repeat;
+    background-image: url(./fondo_header.png),linear-gradient(154deg,#ffffff 90%,#ff0101 90%);
+    position:relative;
+    padding: 30px;
+    font-size: 18px;
+}
+.logo{
+    padding: 0 0;
+    line-height: 80px;
+    height: 68px;
+    width: -68px;
+    margin-top: 11px;
+    margin-bottom: 10px;
+}

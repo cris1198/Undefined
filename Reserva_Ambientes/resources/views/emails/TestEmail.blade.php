@@ -5,129 +5,120 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./cssmail.css" rel="stylesheet">
     <title>Prueba de correo</title>
 </head>
 <body>
+<div class="container mensaje">
+        <div style="margin-left: 40px;">
     @if($details22->aceptadoRechazado === 1)
-        <h1>
-           Su solicitud de reserva a sido ACEPTADO
-        </h1>
-        <h2>
-            Detalles
-        </h2>
-        <h2>
-            Codigo de aula: {{ $details22->codigo }} 
-        </h2>
-        <h2>
-            Fecha de reserva: {{ $details22->fechaReserva }} 
-        </h2>
-        <h2>
+        <h1>Su solicitud de reserva a sido ACEPTADA</h1>
+        <p><strong>Detalles:</strong></p>
+        <p><strong>Código de aula:</strong> {{ $details22->codigo }} </p>
+        <p><strong>Fecha de reserva:</strong> {{ $details22->fechaReserva }} </p>
+        <p>
             @if($details22->periodo === 1)
-            Hora de reserva: 6:45 - 8:15
+            <strong>Hora de reserva:</strong> 6:45 - 8:15
             @endif
 
             @if($details22->periodo === 2)
-            Hora de reserva: 8:15 - 9:45
+            <strong>Hora de reserva:</strong> 8:15 - 9:45
             @endif
 
             @if($details22->periodo === 3)
-            Hora de reserva: 9:45 - 11:15
+            <strong>Hora de reserva:</strong>: 9:45 - 11:15
             @endif
 
             @if($details22->periodo === 4)
-            Hora de reserva: 11:15 - 12:45
+            <strong>Hora de reserva:</strong> 11:15 - 12:45
             @endif
 
             @if($details22->periodo === 5)
-            Hora de reserva: 12:45 - 14:15
+            <strong>Hora de reserva:</strong> 12:45 - 14:15
             @endif
 
             @if($details22->periodo === 6)
-            Hora de reserva: 14:15 - 15:45
+            <strong>Hora de reserva:</strong> 14:15 - 15:45
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 15:45 - 17:15
+            <strong>Hora de reserva:</strong> 15:45 - 17:15
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 17:15 - 18:45
+            <strong>Hora de reserva:</strong> 17:15 - 18:45
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 18:45 - 20:15
+            <strong>Hora de reserva:</strong> 18:45 - 20:15
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 20:15 - 21:45
+            <strong>Hora de reserva:</strong> 20:15 - 21:45
             @endif
+        </p>
+        <p><strong>Motivo de reserva:</strong> {{$details22->motivo}}</p>
+        <p><strong>Materia:</strong> {{$details22->materia}}</p> 
+        </div> 
+        </div>
 
-        </h2>
-        <h2>
-            Motivo de reserva: {{$details22->motivo}}
-        </h2>
-        <h2>
-            Materia: {{$details22->materia}}
-        </h2> 
         @elseif($details22->aceptadoRechazado === 0)
+        <div class="container mensaje">
+        <div style="margin-left: 40px;">
         <h1>
-           Su solicitud de reserva a sido RECHAZADO
+           Su solicitud de reserva a sido RECHAZADA
         </h1>
-        <h2>
-
-            Razon de rechazo: {{$details22->razon}}
-        </h2>
-        <h2>
-            Detalles:
-        </h2>
-        <h2>
-            Codigo de aula: {{ $details22->codigo }} 
-        </h2>
-        <h2>
-            Fecha de reserva: {{ $details22->fechaReserva }} 
-        </h2>
-        <h2>
+        <p><strong>Razon de rechazo:</strong> {{$details22->razon}}</p>
+        <p><strong>Detalles:</strong></p>
+        <p><strong>Codigo de aula:</strong> {{ $details22->codigo }} </p>
+        <p>Fecha de reserva: {{ $details22->fechaReserva }} </p>
+       
+        <p>
             @if($details22->periodo === 1)
-            Hora de reserva: 6:45 - 8:15
+            <strong>Hora de reserva:</strong> 6:45 - 8:15
             @endif
 
             @if($details22->periodo === 2)
-            Hora de reserva: 8:15 - 9:45
+            <strong>Hora de reserva:</strong> 8:15 - 9:45
             @endif
 
             @if($details22->periodo === 3)
-            Hora de reserva: 9:45 - 11:15
+            <strong>Hora de reserva:</strong> 9:45 - 11:15
             @endif
 
             @if($details22->periodo === 4)
-            Hora de reserva: 11:15 - 12:45
+            <strong>Hora de reserva:</strong> 11:15 - 12:45
             @endif
 
             @if($details22->periodo === 5)
-            Hora de reserva: 12:45 - 14:15
+            <strong>Hora de reserva:</strong> 12:45 - 14:15
             @endif
 
             @if($details22->periodo === 6)
-            Hora de reserva: 14:15 - 15:45
+            <strong>Hora de reserva:</strong> 14:15 - 15:45
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 15:45 - 17:15
+            <strong>Hora de reserva:</strong> 15:45 - 17:15
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 17:15 - 18:45
+            <strong>Hora de reserva:</strong> 17:15 - 18:45
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 18:45 - 20:15
+            <strong>Hora de reserva:</strong> 18:45 - 20:15
             @endif
 
             @if($details22->periodo === 7)
-            Hora de reserva: 20:15 - 21:45
+            <strong>Hora de reserva:</strong> 20:15 - 21:45
             @endif
+        </p>
+        </div> 
+        </div>
     @endif
     
-   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
