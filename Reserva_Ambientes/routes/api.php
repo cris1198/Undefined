@@ -57,9 +57,9 @@ Route::get('/ambientes/{id}','AmbienteController@getById'); //devuelve un Ambien
 
 
 Route::get('/reserva','ReservaController@index');  //mostrar todos las reservas
-//Route::post('/reserva', 'ReservaController@store'); //agregar una reserva
 Route::get('/reserva/PorReservar', 'ReservaController@getToReserve'); //devuelve las reservas por aceptar o rechazar
 Route::post('/reserva', 'ReservaController@store'); //agregar una reserva
+Route::post('/reserva/Recomendacion', 'ReservaController@getRecommendation'); //agregar una reserva
 
 Route::put('/reserva/Aceptar/{id}', 'ReservaController@acceptReservation'); //aceptar una reserva
 Route::put('/reserva/Rechazar/{id}', 'ReservaController@rejectReservation'); //rechazar una reserva
@@ -75,4 +75,4 @@ Route::post('/reserva/periodos/{id}', 'ReservaController@getAvailablePeriods'); 
 
 
 
-Route::get('/reserva/Todas/{id}', 'ReservaController@getAcceptAndReject'); //rechazar una reserva
+Route::get('/reserva/Todas/{id}', 'ReservaController@getAcceptAndReject'); //devuelve peticiones rechazadas y aceptadas
