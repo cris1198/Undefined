@@ -90,7 +90,7 @@ class ReservaController extends Controller
         $cantidadPermitida = ReservaController::cantidadPermitidaAula($request->cantidadEstudiantes,$request->id_aulas);
         $periodoCorrecto = ReservaController::cantidadCorrecto($request->periodo);
         $cantidadPeriodoCorrecto = ReservaController::cantidadCorrecto($request->cantidadPeriodo);
-        //$razonCorrecto = ReservaController::razonCorrecto($request->motivo);
+        $razonCorrecto = ReservaController::razonCorrecto($request->motivo);
         //-----------Fin Validaciones-------------------------
 
         if(!$codigoCorrecto){
@@ -127,42 +127,25 @@ class ReservaController extends Controller
                                         'cantidadPeriodo' => 5
                                     ], 500);
                                 }else{
-                                    /* if(!$razonCorrecto){
+                                    if(!$razonCorrecto){
                                         return response()->json([   
                                             'razon' => 6
                                         ], 500);
-                                    }else{ */
-                                        if($request->motivo == "Examen"){                        //Si el motivo es "Examen" la reserva se guarda automaticamente
-
-                                            //(new Reserva($request->input()))->saveOrFail();    //Guarda con todos los datos, sino lo logra falla
-                                            $reserva = new Reserva($request->all());             
-                                            $reserva->observaciones = ReservaController::observaciones($request->id_users, $request->grupo, $request->materia, $request->cantidadEstudiantes, $request->id_aulas);
-                                            //$is_user = Auth::user()->id;
-                                            //$is_user = auth()->user()->id;
-                                            //$reserva1->id_users = $is_user;
-                                            $reserva->save();                                              //Guardar una reserva
-                                            ReservaController::acceptReservation($reserva->id);            //Aceptar la reserva
-                                            return response()->json([                       
-                                                'Respuesta' => 'Reserva Creada y Aceptada Correctamente',  //JSON con la respuesta
-                                                //"data" => auth()->user()
-                                            ], 202); 
-                                        }else{
+                                    }else{
                                             
-                                            //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
-                                            $reserva1 = new Reserva($request->all());
-                                            $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->grupo, $request->materia, $request->cantidadEstudiantes, $request->id_aulas);
-                                            //$is_user = Auth::user()->id;
-                                            //$is_user = auth()->user()->id;
-                                            //$reserva1->id_users = $is_user;
-                                            $reserva1->save();                                  //Guardar una reserva
-                                            return response()->json([   
-                                                'Respuesta' => 'Reserva Creada Correctamente',  //JSON con la respuesta
-                                                //"data" => auth()->user()
-                                            ], 202); 
-                                        }
+                                        //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
+                                        $reserva1 = new Reserva($request->all());
+                                        $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->grupo, $request->materia, $request->cantidadEstudiantes, $request->id_aulas);
+                                        //$is_user = Auth::user()->id;
+                                        //$is_user = auth()->user()->id;
+                                        //$reserva1->id_users = $is_user;
+                                        $reserva1->save();                                  //Guardar una reserva
+                                        return response()->json([   
+                                            'Respuesta' => 'Reserva Creada Correctamente',  //JSON con la respuesta
+                                            //"data" => auth()->user()
+                                        ], 202); 
 
-
-                                    /* } */
+                                    }
                                 }
                             }
                        /*  } */

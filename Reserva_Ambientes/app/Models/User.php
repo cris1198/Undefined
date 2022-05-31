@@ -32,4 +32,9 @@ class User extends Authenticatable
         return $this->hasMany(Grupo::class,'id');
     }
 
+    public function findByCorreo($correo = ''){
+        return self::where('email', 'like', $correo)
+                ->get();
+    }
+
 }
