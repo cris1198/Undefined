@@ -134,11 +134,14 @@ class Aula extends Model
         }
     }
 
-    public static function recomendar($cantidad=''){
+    public static function recomendar( $caracteristicas='', $tipo='', $capacidad=''){
         
-        $aulas = self::where('capacidad', '<=', $cantidad+30)
-        ->where('capacidad', '>=', $cantidad)
-        ->get();
+        $aulas = self::where('capacidad', '<=', $capacidad+50)
+            ->where('capacidad', '>=', $capacidad) 
+            ->where('caracteristicas', 'like', "%$caracteristicas%")
+            ->where('tipo', 'like', "%$tipo%")
+            ->take(5)
+            ->get();
         return $aulas;
     }
 

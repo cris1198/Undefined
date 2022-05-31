@@ -22,4 +22,14 @@ class Grupo extends Model
     public function materias(){
         return $this->belongsTo(Materia::class,'id_materias');
     }
+
+    public static function searchByUserId($userId=''){
+        return self::where('id_users', 'like', $userId)
+                ->get();
+    }
+
+    public static function gruposWithoutUser(){
+        return self::whereNull('id_users')
+                ->get();
+    }
 }
