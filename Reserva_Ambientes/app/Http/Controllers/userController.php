@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Mail;
@@ -78,6 +79,16 @@ class userController extends Controller
         }
 
 
+    public function index(){ //retorna todos los Usuarios
+        $users = User::all();
+
+        return $users;                     //JSON con los usuarios
+    }
+
+    public function getById($id)           //retorna una usuario por el ID
+    {
+        $user = User::findOrFail($id);     //si no encuentra un usuario devuelve falso
+        return $user;                      //JSON con el usuario
     }
 
     public function registro(Request $request){
@@ -119,6 +130,7 @@ class userController extends Controller
                     "name" => $user->name,
                     "apellido" => $user->apellido,
                     "esAdmin" => $user->esAdmin,
+                    "id" => $user->id,
                     
                 ]);
         
@@ -151,4 +163,42 @@ class userController extends Controller
             "msg" => "cierre sesion"
         ]);
     }
+
+    public function destroy($id)               //elimina un ambiente
+    {
+        $user = User::findOrFail($id);         //si no encuentra ambiente devuelve falso
+        /* $url_image = str_replace('storage', 'public', $aula->imagen);
+        Storage::delete($url_image);           //Elimina una imagen */
+        User::destroy($id);
+        return response()->json([              //JSON con los ambientes
+            'Respuesta' => 'Eliminado correctamente'
+        ], 201);                               
+    }
+
+    public function update(Request $request, $id)        //actualiza los datos de un aula
+    {
+        $request->validate([
+            'name' => 'required',
+            'apellido' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'esAdmin' => 'required',
+
+        ]);
+
+        $user = User::findOrFail($id);                   //si no encuentra aula devuelve falso   
+        
+        //$aula->update($request->except('imagen'));       //guarda cambios
+        $user->name = $request->name;
+        $user->apellido = $request->apellido;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->esAdmin = $request->esAdmin;
+        $user->save();
+
+        return response()->json([                        
+            'Respuesta' => 'Actualizado correctamente'
+            ], 202);
+    }
+        
 }

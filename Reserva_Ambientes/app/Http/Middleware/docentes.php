@@ -18,7 +18,10 @@ class docentes
         if(auth()->user()->esAdmin=="no"){
             return $next($request);
         }else{
-            return redirect('/api/ambientes/1');
+           // return redirect('/api/ambientes/1');
+           return response()->json([
+               "msg"=> "no amiguito"
+           ],401);
         }
     }
 }

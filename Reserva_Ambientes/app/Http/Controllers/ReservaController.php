@@ -80,6 +80,8 @@ class ReservaController extends Controller
         
         User::findOrFail($request->id_users); 
         Aula::findOrFail($request->id_aulas); 
+
+        //-----------Inicio Validaciones----------------
         $codigoCorrecto = ReservaController::codigoCorrecto($request->codigo);
         $materiaCorrecto = ReservaController::materiaCorrecto($request->materia);
         $grupoCorrecto = ReservaController::grupoCorrecto($request->grupo);
@@ -89,6 +91,7 @@ class ReservaController extends Controller
         $periodoCorrecto = ReservaController::cantidadCorrecto($request->periodo);
         $cantidadPeriodoCorrecto = ReservaController::cantidadCorrecto($request->cantidadPeriodo);
         $razonCorrecto = ReservaController::razonCorrecto($request->motivo);
+        //-----------Fin Validaciones-------------------------
 
         if(!$codigoCorrecto){
             return response()->json([   
@@ -129,19 +132,18 @@ class ReservaController extends Controller
                                             'razon' => 6
                                         ], 500);
                                     }else{
+                                            
                                         //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
                                         $reserva1 = new Reserva($request->all());
                                         $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->grupo, $request->materia, $request->cantidadEstudiantes, $request->id_aulas);
                                         //$is_user = Auth::user()->id;
                                         //$is_user = auth()->user()->id;
                                         //$reserva1->id_users = $is_user;
-                                        $reserva1->save();
+                                        $reserva1->save();                                  //Guardar una reserva
                                         return response()->json([   
                                             'Respuesta' => 'Reserva Creada Correctamente',  //JSON con la respuesta
                                             //"data" => auth()->user()
                                         ], 202); 
-
-
 
                                     }
                                 }
@@ -158,8 +160,8 @@ class ReservaController extends Controller
         $reservas = Reserva::Aceptados($id);
         return $reservas;
     }
-    //id_user   materia     grupo  cantidadEstudaintes
-    public function observaciones($ids,$g, $nombremateria, $cant, $idau){
+    
+    public function observaciones($ids,$g, $nombremateria, $cant, $idau){       //id_user   materia     grupo  cantidadEstudaintes
         $obs = "";
         $materia = Materia::where("nombreMateria","=",$nombremateria)->first();
        
@@ -194,11 +196,13 @@ class ReservaController extends Controller
         $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
 
             $i=0;
-                foreach ($reservas as $reserva) { 
+                foreach ($reservas as $reserva){  //convierte numero de periodo en texto
                     $j=1;
-                    while($j < 11){
+                    $bandera = true;
+                    while($j < 11 && $bandera){
                         if ($reserva["periodo"] == $j) {
                             $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
                         }
                         $j=$j+1;
                     }
@@ -214,11 +218,13 @@ class ReservaController extends Controller
         $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
 
             $i=0;
-                foreach ($reservas as $reserva) { 
+                foreach ($reservas as $reserva){       //convierte numero de periodo en texto
                     $j=1;
-                    while($j < 11){
+                    $bandera = true;
+                    while($j < 11 && $bandera){
                         if ($reserva["periodo"] == $j) {
                             $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
                         }
                         $j=$j+1;
                     }
@@ -227,11 +233,15 @@ class ReservaController extends Controller
 
         return $reservas;
     }
+
+    public function getRecommendation(Request $request){  //Recomienda aulas segun las caracteristicas, tipo y capacidad ingresado
+        $aulasRecomendadas = Aula::recomendar($request->caracteristicas, $request->tipo, $request->capacidad);
+        return $aulasRecomendadas;
+    }
     
 
-    public function getAvailablePeriods(Request $request, $id){
+    public function getAvailablePeriods(Request $request, $id){ //devuelve los periodos disponibles, con el status 1=No disponible y 0=Disponible
         Aula::findOrFail($id);
-        //$fecha = $request->input('fecha');
         $fecha = $request->fecha;
         $reservas = Reserva::getHorario ($id, $fecha);
         $periodosModificados= array();
@@ -290,6 +300,9 @@ class ReservaController extends Controller
 
         return json_encode($periodosModificados);
     }
+
+
+//----------------------------------------VALIDACIONES---------------------------------------------------------
 
     private function cantidadCorrecto($capacidad){  // 1 si hay puro numeros,  0 si hay signos o letras
         if(strlen($capacidad)<4){
@@ -378,6 +391,5 @@ class ReservaController extends Controller
         }
         return $permitido;
     }
-
 
 }

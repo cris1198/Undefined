@@ -14,6 +14,7 @@ class AmbienteController extends Controller
 
         return $ambientes;                     //JSON con los ambientes
     }
+
     public function store(Request $request)   {
         $capacidadCorrecto = AmbienteController::capacidadCorrecto($request->capacidad);
         $codigoCorrecto = AmbienteController::codigoCorrecto($request->codigo);
@@ -104,8 +105,8 @@ class AmbienteController extends Controller
                             'caracteristicas' => 2
                          ], 500);
                     }else{
-                        $aula->update($request->except('imagen'));                      //guarda cambios
-                        return response()->json([                        //JSON con los ambientes
+                        $aula->update($request->except('imagen'));     //guarda cambios
+                        return response()->json([                        
                             'Respuesta' => 'Actualizado correctamente'
                         ], 202);
                     }
@@ -116,25 +117,31 @@ class AmbienteController extends Controller
 
     public function destroy($id)               //elimina un ambiente
     {
-        Aula::findOrFail($id);                 //si no encuentra ambiente devuelve falso
+        $aula = Aula::findOrFail($id);         //si no encuentra ambiente devuelve falso
+        $url_image = str_replace('storage', 'public', $aula->imagen);
+        Storage::delete($url_image);           //Elimina una imagen
         Aula::destroy($id);
         return response()->json([              //JSON con los ambientes
             'Respuesta' => 'Eliminado correctamente'
         ], 201);                               
     }
     
+    
+    public function getById($id)               //retorna un Ambiente por el ID
+    {
+        $ambiente = Aula::findOrFail($id);     //si no encuentra ambiente devuelve falso
+        return $ambiente;                      //JSON con los ambientes
+    }
+
+    
+    //---------------------Inicio Validaciones--------------------------------------
+
     private function capacidadCorrecto($capacidad){  // 1 si hay puro numeros,  0 si hay signos o letras
         if(strlen($capacidad)<4){
             $capacidadCorrecta =is_numeric($capacidad)+0; 
             return $capacidadCorrecta;
         }
         return $capacidadCorrecta = 0;
-    }
-    
-    public function getById($id)               //retorna un Ambiente por el ID
-    {
-        $ambiente = Aula::findOrFail($id);     //si no encuentra ambiente devuelve falso
-        return $ambiente;                      //JSON con los ambientes
     }
 
     private function codigoCorrecto($codigo){ //0 si el codigo contiene caracteres no alfanuericos, 1 correcto
@@ -172,4 +179,6 @@ class AmbienteController extends Controller
         }
         return $caracCorrecto;
     }
+
+    //----------------------------Fin Validaciones----------------------------
 }
