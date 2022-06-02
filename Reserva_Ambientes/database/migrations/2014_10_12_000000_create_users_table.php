@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('esAdmin');
             $table->string('password');
-            
+            $table->string('verficador')->nullable($value=true);
             //$table->string('esAdmin')->default('no');
     
         });

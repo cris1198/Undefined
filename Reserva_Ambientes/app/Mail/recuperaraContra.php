@@ -7,20 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-
-class TestMail extends Mailable
+class recuperaraContra extends Mailable
 {
     use Queueable, SerializesModels;
-    public $details22;
+public $details;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($details)
     {
-       $this->details22 = $data;
-       
+        $this->details = $details;
     }
 
     /**
@@ -30,6 +28,6 @@ class TestMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Notificacion de reserva de aula')->view('emails.TestEmail');
+        return $this->subject('Recuperacion de contraseña')->view('emails.contra');
     }
 }

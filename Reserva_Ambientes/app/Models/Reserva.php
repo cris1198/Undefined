@@ -15,6 +15,7 @@ class Reserva extends Model
         'materia',
         'grupo',
         'motivo',
+        'tipo',
         'observaciones',
         'cantidadEstudiantes',
         'fechaReserva',
