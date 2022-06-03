@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('registro','userController@registro');
 Route::post('login','userController@login');
+Route::get('/logout','userController@logout');
 
 Route::put('/recoverpassword','userController@recoverPassword');
 Route::post('/compararCodigo','userController@comparetoKey');
@@ -83,6 +84,7 @@ Route::post('/reserva/periodos/{id}', 'ReservaController@getAvailablePeriods'); 
 
 Route::get('/grupo/paraAsignar', 'GrupoController@getToAssign');  //Devuelve materias con grupos para asignar a docentes
 Route::put('/grupo/Asignar', 'GrupoController@assignUser');
+Route::put('/grupo/AsignarTodos', 'GrupoController@assignAll');
 Route::get('/grupo/User/{id}', 'GrupoController@getByUser');  //Devuelve materias con grupos segun un usuario
 Route::get('/grupo/{id}', 'GrupoController@getById');  //Devuelve el grupo segun el id
 Route::get('/reserva/Todas/{id}', 'ReservaController@getAcceptAndReject'); //devuelve peticiones rechazadas y aceptadas
