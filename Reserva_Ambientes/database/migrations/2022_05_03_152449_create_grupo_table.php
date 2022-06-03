@@ -18,8 +18,8 @@ class CreateGrupoTable extends Migration
             $table->foreignID("id_users")
                   ->nullable()
                   ->constrained("users")
-                  ->cascadeOnUpdate()
-                  ->cascadeOnDelete();
+                  ->cascadeOnUpdate();
+                  //->cascadeOnDelete();
             $table->foreignID("id_materias")
                   ->nullable()
                   ->constrained("materias")

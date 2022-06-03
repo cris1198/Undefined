@@ -18,8 +18,8 @@ class CreateAulaTable extends Migration
             $table->foreignID("id_users")
                   ->nullable()
                   ->constrained("users")
-                  ->cascadeOnUpdate()
-                  ->cascadeOnDelete();
+                  ->cascadeOnUpdate();
+                 // ->cascadeOnDelete();
             $table->integer("capacidad");
             $table->string("codigo");
             $table->string("tipo");

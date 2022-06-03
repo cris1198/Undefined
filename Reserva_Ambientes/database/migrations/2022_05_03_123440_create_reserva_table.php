@@ -18,8 +18,8 @@ class CreateReservaTable extends Migration
             $table->foreignID("id_users")
                   ->nullable()
                   ->constrained("users")
-                  ->cascadeOnUpdate()
-                  ->cascadeOnDelete();
+                  ->cascadeOnUpdate();
+                  //->cascadeOnDelete();
             $table->foreignID("id_aulas")
                   ->nullable()
                   ->constrained("aulas")
