@@ -78,7 +78,7 @@ class userController extends Controller
             ],404);
         }
 
-
+    }
     public function index(){ //retorna todos los Usuarios
         $users = User::all();
 
