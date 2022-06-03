@@ -17,6 +17,10 @@ Route::post('registro','userController@registro');
 Route::post('login','userController@login');
 Route::get('/logout','userController@logout');
 
+Route::put('/recoverpassword','userController@recoverPassword');
+Route::post('/compararCodigo','userController@comparetoKey');
+Route::put('/nuevaContraseña','userController@newPassword');
+
 Route::get('/reserva/PorReservar', 'ReservaController@getToReserve'); //devuelve las reservas por aceptar o rechazar
 
 
@@ -25,18 +29,21 @@ Route::group(['middleware' => ["auth:sanctum"]], function(){
 });
 
 
-//Route::group(['middleware' => ["auth:sanctum",'docente']], function(){
-    
+Route::group(['middleware' => ["auth:sanctum",'docente']], function(){
+    Route::get('/logout','userController@logout');
+    Route::get('/perfil','userController@perfil');
     
     Route::post('/reserva', 'ReservaController@store'); //agregar una reserva docente
     Route::get('/reserva/User/{id}', 'ReservaController@getByUserId'); //devuelve una reserva por el usuario quien reserva docente
     Route::get('/reserva/Rechazar/{id}', 'ReservaController@getRejected'); //devuelve las reservas rechazadas de un usuario docente 
     Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas aceptadas de un usuario docente
-//});
+});
 
 
 //Route::group(['middleware' => ["auth:sanctum",'adminAgee']], function(){
     //rutas
+   
+    
     
     Route::get('/perfil','userController@perfil');
     Route::get('/usuarios','userController@index');  //devuelve todos los usuarios

@@ -6,10 +6,80 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\recuperaraContra;
 class userController extends Controller
 {
-    public function index()                //retorna todos los Usuarios
-    {
+    public function newPassword(Request $request){
+        if($request->password1 == $request->password2){
+            $usuario = User::where("email","=",$request->email)->first();
+            $usuario->password = Hash::make($request->password1) ;
+            $usuario->save();
+            return response()->json([
+                "status" => true,
+                "msg" => "se cambio correctamente",
+                ]);
+        }else{
+            return response()->json([
+                "status" => false,
+                "msg" => "verifique el password",
+                ]);
+        }
+    }
+    
+    public function comparetoKey(Request $request){
+        $usuario = User::where("email","=",$request->email)->first();
+        if(isset($usuario->id)){
+            $key_code = $usuario->verficador; 
+            if($key_code == $request->codigo){
+                $usuario->verficador = "d345dxf"; 
+                $usuario->save();
+                return response()->json([
+                    "status" => true,
+                    "msg" => "codigo verficado",
+                    ]);
+                
+
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "msg" => "error de codigo",
+                    ]);
+            }
+        }else{
+            return response()->json([
+                "status" => false,
+                "msg" => "correo no registrado",
+            ],404);
+        }
+    }
+    public function recoverPassword(Request $request){
+
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $texto = substr(str_shuffle($permitted_chars), 0, 10);
+        
+        $usuario = User::where("email","=",$request->email)->first();
+        //$usuario122 = User::findOrFail(2); 
+        
+        if(isset($usuario->id)){
+            $usuario->verficador = $texto; 
+            $t= $usuario->verficador;
+            $usuario->save();
+            Mail::to($usuario->email)->send(new recuperaraContra($usuario));
+            return response()->json([
+            "status" => true,
+            "msg" => "codigo enviado",
+            ]);
+        }else{
+            return response()->json([
+                "status" => false,
+                "msg" => "correo no registrado",
+            ],404);
+        }
+
+
+    public function index(){ //retorna todos los Usuarios
         $users = User::all();
 
         return $users;                     //JSON con los usuarios
@@ -60,6 +130,8 @@ class userController extends Controller
                     "name" => $user->name,
                     "apellido" => $user->apellido,
                     "esAdmin" => $user->esAdmin,
+                    "id" => $user->id,
+                    
                 ]);
         
            }else{

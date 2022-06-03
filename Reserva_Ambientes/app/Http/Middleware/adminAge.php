@@ -19,7 +19,10 @@ class adminAge
         if(auth()->user()->esAdmin=="yes"){
             return $next($request);
         }else{
-            return redirect('/api/ambientes/2');
+           // return redirect('/api/ambientes/2');
+           return response()->json([
+            "msg"=> "no amiguito"
+           ],401);
         }
         
     }
