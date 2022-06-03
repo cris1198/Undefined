@@ -25,9 +25,11 @@ class GrupoController extends Controller
     public function getByUser($userId){       //devuelve los grupos segun el usuario al que este asignado
         $grupos = Grupo::searchByUserId($userId); 
         $respuesta = array();
+        $pos = 1;
 
         foreach($grupos as $grupo){
-            array_push($respuesta, array("id_grupo" => $grupo->id, "grupo" => $grupo->nombreGrupo, "materia" => GrupoController::getName($grupo->id_materias))); //crea el json con los datos importantes
+            array_push($respuesta, array("nombre" => $pos,"id_grupo" => $grupo->id, "grupo" => $grupo->nombreGrupo, "materia" => GrupoController::getName($grupo->id_materias))); //crea el json con los datos importantes
+            $pos = $pos + 1;
         }
         return $respuesta;
     }
@@ -35,11 +37,35 @@ class GrupoController extends Controller
     public function getToAssign(){            //devuelve los grupos que no tienen asignado un docente
         $grupos = Grupo::gruposWithoutUser(); 
         $respuesta = array();
+        $pos = 1;
 
         foreach($grupos as $grupo){
-            array_push($respuesta, array("id_grupo" => $grupo->id, "grupo" => $grupo->nombreGrupo, "materia" => GrupoController::getName($grupo->id_materias))); //crea el json con los datos importantes
+            array_push($respuesta, array("nombre" => $pos,"id_grupo" => $grupo->id, "grupo" => $grupo->nombreGrupo, "materia" => GrupoController::getName($grupo->id_materias))); //crea el json con los datos importantes
+            $pos = $pos + 1;
         }
         return $respuesta; 
+    }
+
+    public function assignAll(Request $request){            //devuelve el nommbre de una materia segun su id
+        
+        $id = 1;
+        $bandera = false; 
+        while(!$bandera){
+            /* $grupo = "id_grupo"+$id; */
+            if($request->$id){
+                $grupo = Grupo::findOrFail($request->$id);
+                $grupo->id_users = GrupoController::getUserId($request->correo);   
+                $grupo->save(); 
+                echo($request->$id);
+            }else{
+                $bandera = true;
+            }
+            $id = $id + 1;
+        }
+        
+        return response()->json([   
+            'Respuesta' => 'Aceptados con exito'
+        ], 202);  
     }
 
     private function getName($id){            //devuelve el nommbre de una materia segun su id
@@ -52,6 +78,5 @@ class GrupoController extends Controller
         $id = $user[0][ "id" ];     
         return $id;  
     }
-
     
 }
