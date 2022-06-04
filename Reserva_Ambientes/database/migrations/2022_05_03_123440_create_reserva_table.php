@@ -25,9 +25,11 @@ class CreateReservaTable extends Migration
                   ->constrained("aulas")
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
+            $table->foreignID("id_grupo")
+                  ->nullable()
+                  ->constrained("grupos")
+                  ->cascadeOnUpdate();
             $table->string("codigo");
-            $table->string("materia");
-            $table->string("grupo");
             $table->string("motivo");
             $table->string("tipo");
             $table->string("observaciones")->nullable($value=true);
