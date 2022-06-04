@@ -49,17 +49,16 @@ class GrupoController extends Controller
     public function assignAll(Request $request){            //devuelve el nommbre de una materia segun su id
         
         $id = 1;
-        $bandera = false; 
-        while(!$bandera){
+        while($id < 20){
             /* $grupo = "id_grupo"+$id; */
             if($request->$id){
                 $grupo = Grupo::findOrFail($request->$id);
                 $grupo->id_users = GrupoController::getUserId($request->correo);   
                 $grupo->save(); 
                 echo($request->$id);
-            }else{
+/*             }else{
                 $bandera = true;
-            }
+*/          } 
             $id = $id + 1;
         }
         
