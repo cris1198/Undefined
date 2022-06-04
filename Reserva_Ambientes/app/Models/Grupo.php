@@ -32,4 +32,7 @@ class Grupo extends Model
         return self::whereNull('id_users')
                 ->get();
     }
+    public function reservas(){
+        return $this->hasMany(Reserva::class,'id');
+    }
 }

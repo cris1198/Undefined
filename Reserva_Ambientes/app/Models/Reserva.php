@@ -28,6 +28,9 @@ class Reserva extends Model
     public function users(){
         return $this->belongsTo(User::class,'id_users');
     }
+    public function grupo(){
+        return $this->belongsTo(Grupo::class,'id_grupos');
+    }
     public function aulas(){
         return $this->belongsTo(Aula::class,'id_aulas');
     }
