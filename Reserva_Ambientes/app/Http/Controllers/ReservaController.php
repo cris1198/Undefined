@@ -221,7 +221,7 @@ class ReservaController extends Controller
     }
 
     public function getRecommendation(Request $request){  //Recomienda aulas segun las caracteristicas, tipo y capacidad ingresado
-        $aulasRecomendadas = Aula::recomendar($request->caracteristicas, $request->tipo, $request->capacidad);
+        $aulasRecomendadas = Aula::recomendar($request->id_aula, $request->caracteristicas, $request->tipo, $request->capacidad);
         return $aulasRecomendadas;
     }
     

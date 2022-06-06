@@ -11,6 +11,7 @@ class Reserva extends Model
     protected $fillable = [
         'id_users',
         'id_aulas',
+        'id_grupos',
         'codigo',
         'materia',
         'grupo',
@@ -77,7 +78,7 @@ class Reserva extends Model
     public static function AcceptAndReject($userId=''){
         return self::where('id_users', 'like', $userId)
                 ->where('aceptadoRechazado', 'like', 0)
-                ->orWhere('aceptadoRechazado', 'like', 1)
+                ->where('aceptadoRechazado', 'like', 1)
                 ->orderBy('fechaReserva', 'DESC')
                 ->take(5)
                 ->get();
