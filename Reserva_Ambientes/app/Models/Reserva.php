@@ -24,6 +24,7 @@ class Reserva extends Model
         'cantidadPeriodo',
         'aceptadoRechazado',
         'razon',
+        'created_at',
         ];
 
     public function users(){
@@ -77,9 +78,8 @@ class Reserva extends Model
 
     public static function AcceptAndReject($userId=''){
         return self::where('id_users', 'like', $userId)
-                ->where('aceptadoRechazado', 'like', 0)
-                ->where('aceptadoRechazado', 'like', 1)
-                ->orderBy('fechaReserva', 'DESC')
+                ->whereNotNull('aceptadoRechazado')
+                ->orderBy('created_at', 'DESC')
                 ->take(5)
                 ->get();
     }
