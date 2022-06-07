@@ -17,12 +17,12 @@ class userController extends Controller
             $usuario->password = Hash::make($request->password1) ;
             $usuario->save();
             return response()->json([
-                "status" => true,
+                "status" => 1,
                 "msg" => "se cambio correctamente",
                 ]);
         }else{
             return response()->json([
-                "status" => false,
+                "status" => 0,
                 "msg" => "verifique el password",
                 ]);
         }
@@ -36,20 +36,20 @@ class userController extends Controller
                 $usuario->verficador = "d345dxf"; 
                 $usuario->save();
                 return response()->json([
-                    "status" => true,
+                    "status" => 1,
                     "msg" => "codigo verficado",
                     ]);
                 
 
             }else{
                 return response()->json([
-                    "status" => false,
+                    "status" => 0,
                     "msg" => "error de codigo",
                     ]);
             }
         }else{
             return response()->json([
-                "status" => false,
+                "status" => 0,
                 "msg" => "correo no registrado",
             ],404);
         }
@@ -92,13 +92,13 @@ class userController extends Controller
     }
 
     public function registro(Request $request){
-        $request->validate([
-            'name' => 'required',
-            'apellido' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
-
-        ]);
+        $usuario = User::where("email","=",$request->email)->first();
+        if(isset($usuario->id)){
+            return response()->json([
+                "status" => 0,
+                "msg" => "usuario ya existe",
+            ]);
+        }
         $user = new User();
         $user->name = $request->name;
         $user->apellido = $request->apellido;
