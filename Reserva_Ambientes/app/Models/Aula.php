@@ -18,8 +18,8 @@ class Aula extends Model
     public function horarios(){
         return $this->hasMany(Horario::class,'id');
     }
-    protected $fillable = ['id_users','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
-    protected $buscable = ['id_users','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
+    protected $fillable = ['id','id_users','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
+    protected $buscable = ['id','id_users','capacidad','codigo','tipo','caracteristicas','ubicacion','imagen'];
 
     public static function search($buscar='', $caracteristicas='', $tipo='', $rangeDown='', $rangeUp=''){
 
@@ -134,9 +134,10 @@ class Aula extends Model
         }
     }
 
-    public static function recomendar( $caracteristicas='', $tipo='', $capacidad=''){
+    public static function recomendar($id_aula='', $caracteristicas='', $tipo='', $capacidad=''){
         
-        $aulas = self::where('capacidad', '<=', $capacidad+50)
+        $aulas = self::where('id', '!=', $id_aula)
+            ->where('capacidad', '<=', $capacidad+50)
             ->where('capacidad', '>=', $capacidad) 
             ->where('caracteristicas', 'like', "%$caracteristicas%")
             ->where('tipo', 'like', "%$tipo%")

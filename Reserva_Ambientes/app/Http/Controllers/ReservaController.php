@@ -83,8 +83,6 @@ class ReservaController extends Controller
 
         //-----------Inicio Validaciones----------------
         $codigoCorrecto = ReservaController::codigoCorrecto($request->codigo);
-        $materiaCorrecto = ReservaController::materiaCorrecto($request->materia);
-        $grupoCorrecto = ReservaController::grupoCorrecto($request->grupo);
         
         $cantidadCorrecto = ReservaController::cantidadCorrecto($request->cantidadEstudiantes);
         $cantidadPermitida = ReservaController::cantidadPermitidaAula($request->cantidadEstudiantes,$request->id_aulas);
@@ -98,16 +96,6 @@ class ReservaController extends Controller
                 'codigo' => 1
              ], 500);
         }else{
-            if(!$materiaCorrecto){
-                return response()->json([   
-                    'materia' => 0
-                 ], 500);
-            }else{
-                if(!$grupoCorrecto){
-                    return response()->json([   
-                        'grupo' => 3
-                     ], 500);
-                }else{
                     if(!$cantidadCorrecto){
                         return response()->json([   
                             'cantidad' => 2
@@ -135,7 +123,7 @@ class ReservaController extends Controller
                                             
                                         //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
                                         $reserva1 = new Reserva($request->all());
-                                        $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->grupo, $request->materia, $request->cantidadEstudiantes, $request->id_aulas);
+                                        $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->id_grupo, $request->cantidadEstudiantes, $request->id_aulas);
                                         //$is_user = Auth::user()->id;
                                         //$is_user = auth()->user()->id;
                                         //$reserva1->id_users = $is_user;
@@ -151,9 +139,7 @@ class ReservaController extends Controller
                        /*  } */
                     }
                 }
-            }
-        } 
-         
+            
     }
 
     public function getAccepted($id){           //Obtiene las reservas aceptadas
@@ -161,21 +147,21 @@ class ReservaController extends Controller
         return $reservas;
     }
     
-    public function observaciones($ids,$g, $nombremateria, $cant, $idau){       //id_user   materia     grupo  cantidadEstudaintes
+    public function observaciones($ids,$idg, $cant, $idau){       //id_user   materia     grupo  cantidadEstudaintes
         $obs = "";
-        $materia = Materia::where("nombreMateria","=",$nombremateria)->first();
+        /* $materia = Materia::where("nombreMateria","=",$nombremateria)->first();
        
         if(isset($materia->id)){
             $grupo = Grupo::where("id_materias","=",$materia->id)->first();
             if(isset($grupo->id)){
-                if($grupo->id_users ==$ids){
+                if($grupo->id_users ==$ids){ */
                     $aulaa = Aula::where("id","=",$idau)->first();
                     if($cant <= $aulaa->capacidad){
                         $obs = "No hay observaciones";
                     }else{
                         $obs = "La cantidad de alumnos sobrepasa a la cantidad del total del aula";
                     }
-                }else{
+                /* }else{
                     $obs = "El grupo no le corresponde";
                 }
             }else{
@@ -183,7 +169,7 @@ class ReservaController extends Controller
             }
         }else{
             $obs = "La materia que solicita no existe";
-        }
+        } */
         return $obs;
     }
     public function getRejected($id){           //Obtiene las reservas rechazados
@@ -235,7 +221,7 @@ class ReservaController extends Controller
     }
 
     public function getRecommendation(Request $request){  //Recomienda aulas segun las caracteristicas, tipo y capacidad ingresado
-        $aulasRecomendadas = Aula::recomendar($request->caracteristicas, $request->tipo, $request->capacidad);
+        $aulasRecomendadas = Aula::recomendar($request->id_aula, $request->caracteristicas, $request->tipo, $request->capacidad);
         return $aulasRecomendadas;
     }
     
@@ -372,7 +358,7 @@ class ReservaController extends Controller
         if(strlen($carac)<41 && strlen($carac) > 4){
             while($i < strlen($carac) && $caracCorrecto && strlen($carac)<30 ){
                 $car  = $carac[$i];
-                if(!((ord($car)>= 65 && ord($car)<=90) || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
+                if(!((ord($car)>= 48 && ord($car) <= 57) || (ord($car)>= 65 && ord($car)<=90) || (ord($car)>= 97 && ord($car)<=122) || ord($car)==32)){
                     $caracCorrecto = false;
                 }
                 $i++;

@@ -68,12 +68,12 @@ class userController extends Controller
             $usuario->save();
             Mail::to($usuario->email)->send(new recuperaraContra($usuario));
             return response()->json([
-            "status" => true,
+            "status" => 1,
             "msg" => "codigo enviado",
             ]);
         }else{
             return response()->json([
-                "status" => false,
+                "status" => 0,
                 "msg" => "correo no registrado",
             ],404);
         }
@@ -92,6 +92,13 @@ class userController extends Controller
     }
 
     public function registro(Request $request){
+        /* $request->validate([
+            'name' => 'required',
+            'apellido' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+
+        ]); */
         $usuario = User::where("email","=",$request->email)->first();
         if(isset($usuario->id)){
             return response()->json([
@@ -131,7 +138,6 @@ class userController extends Controller
                     "apellido" => $user->apellido,
                     "esAdmin" => $user->esAdmin,
                     "id" => $user->id,
-                    
                 ]);
         
            }else{

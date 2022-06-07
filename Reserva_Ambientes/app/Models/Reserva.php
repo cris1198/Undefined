@@ -11,6 +11,7 @@ class Reserva extends Model
     protected $fillable = [
         'id_users',
         'id_aulas',
+        'id_grupos',
         'codigo',
         'materia',
         'grupo',
@@ -23,10 +24,14 @@ class Reserva extends Model
         'cantidadPeriodo',
         'aceptadoRechazado',
         'razon',
+        'created_at',
         ];
 
     public function users(){
         return $this->belongsTo(User::class,'id_users');
+    }
+    public function grupo(){
+        return $this->belongsTo(Grupo::class,'id_grupos');
     }
     public function aulas(){
         return $this->belongsTo(Aula::class,'id_aulas');
@@ -73,9 +78,8 @@ class Reserva extends Model
 
     public static function AcceptAndReject($userId=''){
         return self::where('id_users', 'like', $userId)
-                ->where('aceptadoRechazado', 'like', 0)
-                ->orWhere('aceptadoRechazado', 'like', 1)
-                ->orderBy('fechaReserva', 'DESC')
+                ->whereNotNull('aceptadoRechazado')
+                ->orderBy('created_at', 'DESC')
                 ->take(5)
                 ->get();
     }
