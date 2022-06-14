@@ -59,6 +59,7 @@ class GrupoController extends Controller
                 $grupo->id_users = GrupoController::getUserId($request->correo);   
                 $grupo->save();
             }
+            $i=$i+1;
         }
         // while(!$bandera){
         //     /* $grupo = "id_grupo"+$id; */
