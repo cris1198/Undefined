@@ -53,6 +53,9 @@ Route::post('/ambientes','AmbienteController@store');   //agregar nueva
     Route::get('/reserva/PorReservar', 'ReservaController@getToReserve'); //devuelve las reservas por aceptar o rechazar
     Route::get('/usuarios','userController@index');  //devuelve todos los usuarios
     Route::get('/reserva','ReservaController@index');  //mostrar todos las reservas
+    Route::get('/reserva/Primeros','ReservaController@filterPrimeros');  //mostrar todos las reservas
+    Route::get('/reserva/Ultimos','ReservaController@filterUltimos');  //mostrar todos las reservas
+    Route::get('/reserva/Urgencia','ReservaController@filterUrgencia');  //mostrar todos las reservas
     Route::put('/grupo/Asignar', 'GrupoController@assignUser');
     Route::put('/grupo/AsignarTodos', 'GrupoController@assignAll');
 
