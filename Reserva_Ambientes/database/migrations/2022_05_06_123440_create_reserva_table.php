@@ -29,8 +29,8 @@ class CreateReservaTable extends Migration
                   ->nullable()
                   ->constrained("grupos")
                   ->cascadeOnUpdate();
-            $table->string("codigo");
-            $table->string("motivo");
+            $table->string("codigo")->nullable();
+            $table->string("motivo")->nullable();
             $table->string("tipo");
             $table->string("observaciones")->nullable($value=true);
             $table->integer("cantidadEstudiantes");

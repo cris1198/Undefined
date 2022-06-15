@@ -84,5 +84,33 @@ class Reserva extends Model
                 ->get();
     }
     
+    public static function getPrimeros(){
+        return self::orderBy('created_at', 'DESC')
+                ->get();
+    }
+
+    public static function getUltimos(){
+        return self::orderBy('created_at', 'ASC')
+                ->get();
+    }
+
+    public static function getUrgencia(){
+        return self::where('tipo', 'like', 'Examen')
+                ->orderBy('fechaReserva', 'DESC')
+                ->get();
+    }
     
+    public static function getByFechaPeriodo1($fecha='',$periodo='', $periodo2=''){
+        return self::where('fechaReserva', 'like', $fecha)
+                ->where('periodo', 'like', $periodo)
+                ->orWhere('periodo', 'like', $periodo2)
+                ->where('aceptadoRechazado', 'like', 1)
+                ->get();
+    }
+    public static function getByFechaPeriodo2($fecha='',$periodo=''){
+        return self::where('fechaReserva', 'like', $fecha)
+                ->where('periodo', 'like', $periodo)
+                ->where('aceptadoRechazado', 'like', 1)
+                ->get();
+    }
 }
