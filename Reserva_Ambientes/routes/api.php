@@ -38,7 +38,8 @@ Route::put('/nuevaContraseña','userController@newPassword');
     Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas aceptadas de un usuario docente
     Route::post('/ambientes/buscar','AmbienteController@search_and_filter'); //buscador de Ambientes por palabra
     Route::post('/reserva', 'ReservaController@store'); //agregar una reserva
-    Route::post('/reserva/Recomendacion', 'ReservaController@getRecommendation'); //agregar una reserva
+    Route::post('/reserva/Recomendacion', 'ReservaController@getRecommendation'); //devuelve recomendacion de aulas simples
+    Route::post('/reserva/RecomendacionContiguas', 'ReservaController@getRecommendationContiguas'); //devuelve recomendacion de aulas contiguas
     Route::post('/reserva/periodos/{id}', 'ReservaController@getAvailablePeriods'); //devuelve los ambientes reservados en esa fecha especifica
     Route::get('/grupo/User/{id}', 'GrupoController@getByUser');  //Devuelve materias con grupos segun un usuario
     Route::get('/reserva/Todas/{id}', 'ReservaController@getAcceptAndReject'); //devuelve peticiones rechazadas y aceptadas
@@ -58,7 +59,7 @@ Route::post('/ambientes','AmbienteController@store');   //agregar nueva
     Route::get('/usuario/{id}','userController@getById'); //devuelve un usuario por su id
     Route::delete('/usuario/{id}','userController@destroy'); //elimina un usuario por su id
     Route::put('/usuario/{id}','userController@update');     //actualiza datos de un usuario
-    Route::put('/reserva/Aceptar/{id}', 'ReservaController@acceptReservation'); //aceptar una reserva   admin
+    Route::put('/reserva/Aceptar/{id}/{id_aula}', 'ReservaController@acceptReservation'); //aceptar una reserva   admin
     Route::put('/reserva/Rechazar/{id}', 'ReservaController@rejectReservation'); //rechazar una reserva  admin
     Route::get('/reserva/{id}', 'ReservaController@getById'); //devuelve una reserva por su id
     
