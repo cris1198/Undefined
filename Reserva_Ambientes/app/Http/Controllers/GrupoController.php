@@ -61,18 +61,6 @@ class GrupoController extends Controller
             }
             $i=$i+1;
         }
-        // while(!$bandera){
-        //     /* $grupo = "id_grupo"+$id; */
-        //     if($request->$id){
-        //         $grupo = Grupo::findOrFail($request->$id);
-        //         $grupo->id_users = GrupoController::getUserId($request->correo);   
-        //         $grupo->save(); 
-        //         echo($request->$id);
-        //     }else{
-        //         $bandera = true;
-        //     }
-        //     $id = $id + 1;
-        // }
         
         return response()->json([   
             'Respuesta' => 'Aceptados con exito'
