@@ -143,9 +143,12 @@ class Aula extends Model
         return $aulas;
     }
 
-    public static function recomendarContiguas($capacidad=''){
+    public static function recomendarContiguas($capacidad='', $tipo='', $ubicacion=''){
         
-        $aulas = self::where('capacidad', '<=', $capacidad/2)
+        $aulas = self::where('capacidad', '<=', $capacidad + 30)
+            ->where('capacidad', '>=', $capacidad)
+            ->where('tipo', 'like', $tipo)
+            ->where('ubicacion', 'like', $ubicacion)
             ->take(10)
             ->get();
         return $aulas;

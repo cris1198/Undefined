@@ -42,20 +42,20 @@ class AmbienteController extends Controller
                             'caracteristicas' => 2
                          ], 500);
                     }else{
-                        if(!$imgCorrecto){
+                        /* if(!$imgCorrecto){
                             return response()->json([   
                                 'imagen' => 4
                              ], 500);
-                        }else{
+                        }else{ */
                             $new_classroom = new Aula($request->all());
-                            $path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
-                            $url = Storage::url($path);    //poniendo storage
-                            $new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
+                            //$path = $request->imagen->store('/public/aulas'); //aqui se saca la direccion y se guarda la imagen en la carpeta public aulas
+                            //$url = Storage::url($path);    //poniendo storage
+                            //$new_classroom->imagen= $url; // en la base de datos se guarda la direccion referenciando a la imagen
                             $new_classroom->save();
                             return response()->json([   
                                 'ReFspuesta' => 'Agregado Correctamente'
                             ], 202);
-                        }  
+                        /* }   */
                     }
                 }
             }
