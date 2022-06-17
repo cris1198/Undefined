@@ -383,16 +383,34 @@ class ReservaController extends Controller
                 array_push($aulasReservadas, $aulaRes);
             }
         }else{
-            return $aulasContiguas; 
+            $pos = 0; 
+
+            while($pos < sizeof($aulasContiguas)-1){
+                $aulaAux = array();
+                
+                array_push($aulaAux, $aulasContiguas[$pos]);
+                array_push($aulaAux, $aulasContiguas[$pos+1]);
+
+
+                array_push($aulasRecomendadas, $aulaAux);
+
+                $pos = $pos + 2;
+            }
+            return $aulasRecomendadas; 
         }
 
         $pos = 0; 
 
         while($pos < sizeof($aulasContiguas)-1){
+            $aulaAux = array();
             if(!(in_array($aulasContiguas[$pos], $aulasReservadas))) {
                 if(!(in_array($aulasContiguas[$pos+1], $aulasReservadas))){
-                    array_push($aulasRecomendadas, $aulasContiguas[$pos]);
-                    array_push($aulasRecomendadas, $aulasContiguas[$pos+1]);
+                    array_push($aulaAux, $aulasContiguas[$pos]);
+                    array_push($aulaAux, $aulasContiguas[$pos+1]);
+                    echo("entraaa");
+                    print_r($aulaAux);
+                    array_push($aulasRecomendadas, $aulaAux);
+                    print_r($aulasRecomendadas);
                 }
             }
             $pos = $pos + 2;
