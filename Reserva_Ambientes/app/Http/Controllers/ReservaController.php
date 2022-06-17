@@ -54,8 +54,10 @@ class ReservaController extends Controller
 
     public function acceptReservation($id, $id_aula)       //Cambia el estado de rechazado a Aceptado
     {
+        $aula = Aula::findOrFail($id_aula);
         $reserva = Reserva::findOrFail($id); 
         $reserva->id_aulas = $id_aula;
+        $reserva->codigo = $aula->codigo;
         /* $fecha = $reserva->fechaReserva;
         $periodo = $reserva->periodo; */
         $reserva->aceptadoRechazado = 1;         //1 == Aceptado y 0 == Rechazado
@@ -71,11 +73,52 @@ class ReservaController extends Controller
                 Mail::to($usuario->email)->send(new TestMail($reserva));
             }
         } */
-        $usuario = User::where("id","=",$reserva->id_users)->first();
+        //$usuario = User::where("id","=",$reserva->id_users)->first();
         //Mail::to($usuario->email)->send(new TestMail($reserva)); // a donde enviaremos el correo de prueba
         return response()->json([   
             'Respuesta' => 'Reserva Aceptada Correctamente'
         ], 202);                                 //JSON con la respuesta
+    }
+
+    public function acceptReservationContigua($id, $id_aula1, $id_aula2)       //Cambia el estado de rechazado a Aceptado
+    {
+        $aula1 = Aula::findOrFail($id_aula1);
+        $reserva = Reserva::findOrFail($id);
+        if($reserva->aceptadoRechazado == 1){
+            return response()->json([   
+                'Respuesta' => 'Reserva ya creada'
+            ], 508); 
+        } 
+        $reserva->id_aulas = $id_aula1;
+        $reserva->codigo = $aula1->codigo;
+        $reserva->razon = "Aula Contigua";
+        $reserva->aceptadoRechazado = 1;         //1 == Aceptado y 0 == Rechazado
+        $reserva->save();
+
+        $nuevaReserva = new Request(array(
+            "id_users" => $reserva->id_users,
+            "id_grupos" => $reserva->id_grupos,
+            "id_aulas" => $id_aula2,
+            "codigo" => $reserva->codigo,
+            "cantidadEstudiantes" => $reserva->cantidadEstudiantes,
+            "tipo" => $reserva->tipo,
+            "fechaReserva" => $reserva->fechaReserva,
+            "periodo" => $reserva->periodo,
+            "cantidadPeriodo" => $reserva->cantidadPeriodo,
+            "aceptadoRechazado" => $reserva->aceptadoRechazado,
+            "motivo" => $reserva->motivo,
+            "razon" => $reserva->razon
+        ));
+
+        if(ReservaController::store($nuevaReserva)){
+            return response()->json([   
+                'Respuesta' => 'Reserva Aceptada Correctamente'
+            ], 202); 
+        }else{
+            return response()->json([   
+                'Respuesta' => 'No se pudo crear la reserva contigua'
+            ], 508); 
+        }
     }
     
     // public function rejectReservation($id)  {
@@ -145,7 +188,7 @@ class ReservaController extends Controller
                                         }else{    
                                             //(new Reserva($request->input()))->saveOrFail();    //guarda con todos los datos, sino lo logra falla
                                             $reserva1 = new Reserva($request->all());
-                                            $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->id_grupo, $request->cantidadEstudiantes, $request->id_materia);
+                                            $reserva1->observaciones = ReservaController::observaciones($request->id_users, $request->id_grupos, $request->cantidadEstudiantes);
                                             //$is_user = Auth::user()->id;
                                             //$is_user = auth()->user()->id;
                                             //$reserva1->id_users = $is_user;
@@ -170,23 +213,24 @@ class ReservaController extends Controller
         return $reservas;
     }
     
-    public function observaciones($ids,$idg, $cant, $idmat){       //id_user   materia     grupo  cantidadEstudaintes
+    public function observaciones($ids,$idg, $cant){       //id_user   materia     grupo  cantidadEstudaintes
         $obs = "";
-        $materia = Materia::where("id","=",$idmat)->first();
+        $grupo = Grupo::where("id","=",$idg)->first();
+        $materia = Materia::where("id","=",$grupo->id_materias)->first();
        
         if(isset($materia->id)){
             $grupo = Grupo::where("id_materias","=",$materia->id)->first();
             if(isset($grupo->id)){
-                if($grupo->id_users ==$ids){
+                //if($grupo->id_users ==$ids){
                     /* $aulaa = Aula::where("id","=",$idau)->first();
                     if($cant <= $aulaa->capacidad){ */
                         $obs = "No hay observaciones";
                     /* }else{
                         $obs = "La cantidad de alumnos sobrepasa a la cantidad del total del aula";
-                    } */
-                }else{
-                    $obs = "El grupo no le corresponde";
-                }
+                    }*/
+                //}else{
+                  //  $obs = "El grupo no le corresponde";
+                //}
             }else{
                 $obs="El grupo no existe";
             }
@@ -276,28 +320,61 @@ class ReservaController extends Controller
         }else{
             return response()->json([   
                 'aulaVacio' => 0,  //JSON con la respuesta
-            ], 202); 
+            ], 502); 
         }
 
         return $aulasRecomendadas;
     }
     
     public function getRecommendationContiguas(Request $request){  //Recomienda aulas segun las caracteristicas, tipo y capacidad ingresado
-        $aulas = Aula::recomendarContiguas($request->capacidad);
+        
+        $tipos = array("Aula", "Laboratorio", "Auditorio");
+        $ubicaciones = array("Edificio Academico 2 planta baja", "Edificio Academico 2 piso 1", "Edificio Academico 2 piso 2", "Edificio Academico piso 3, Biblioteca", "Campus Central");
+        $aulasContiguas = array();
+
+        foreach($tipos as $tipo){
+            foreach($ubicaciones as $ubicacion){
+                $aulas = Aula::recomendarContiguas($request->capacidad/2, $tipo, $ubicacion);
+                $json= json_encode($aulas);
+                $arrayAulas = json_decode($json, true);
+                if(!empty($arrayAulas)) {
+                    if(sizeof($arrayAulas)%2 == 1){
+                        if(sizeof($arrayAulas) == 1){
+                            
+                        }else{
+                            $cont = 1;
+                            foreach($aulas as $aula){
+                                if($cont <= sizeof($arrayAulas)-1) {
+                                    array_push($aulasContiguas, $aula);
+                                }
+                                $cont = $cont + 1;
+                            }
+                        }
+                    }else{
+                        foreach($aulas as $aula){
+                            array_push($aulasContiguas, $aula);   
+                        }
+                    }
+                }
+            }
+        }
+
+        if(empty($aulasContiguas)){
+            return response()->json([   
+                'noRecomendacion' => 1,  //JSON con la respuesta
+            ], 501); 
+        }
+        
         if($request->cantidadPeriodo == 2){
             $periodo2 = $request->periodo + 1;
-
             $reservas = Reserva::getByFechaPeriodo1($request->fecha, $request->periodo, $periodo2);
         }else{
             $reservas = Reserva::getByFechaPeriodo2($request->fecha, $request->periodo);
         }
         $aulasRecomendadas = array();
         $aulasReservadas = array();
-        $json= json_encode($aulas);
-        $arrayAulas = json_decode($json, true);
         $json= json_encode($reservas);
         $arrayReservas = json_decode($json, true);
-
 
         
         if(!empty($arrayReservas)){
@@ -306,18 +383,25 @@ class ReservaController extends Controller
                 array_push($aulasReservadas, $aulaRes);
             }
         }else{
-            return $aulas; 
+            return $aulasContiguas; 
         }
-        if(!empty($arrayAulas)){
-            foreach($aulas as $aula){
-                if(!(in_array($aula, $aulasReservadas))) {
-                    array_push($aulasRecomendadas, $aula);
+
+        $pos = 0; 
+
+        while($pos < sizeof($aulasContiguas)-1){
+            if(!(in_array($aulasContiguas[$pos], $aulasReservadas))) {
+                if(!(in_array($aulasContiguas[$pos+1], $aulasReservadas))){
+                    array_push($aulasRecomendadas, $aulasContiguas[$pos]);
+                    array_push($aulasRecomendadas, $aulasContiguas[$pos+1]);
                 }
             }
-        }else{
+            $pos = $pos + 2;
+        }
+
+        if(empty($aulasRecomendadas)){
             return response()->json([   
-                'aulaVacio' => 0,  //JSON con la respuesta
-            ], 202); 
+                'Ocupadas' => 2,  //JSON con la respuesta
+            ], 502); 
         }
 
         return $aulasRecomendadas;

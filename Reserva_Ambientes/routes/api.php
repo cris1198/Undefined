@@ -63,6 +63,7 @@ Route::post('/ambientes','AmbienteController@store');   //agregar nueva
     Route::delete('/usuario/{id}','userController@destroy'); //elimina un usuario por su id
     Route::put('/usuario/{id}','userController@update');     //actualiza datos de un usuario
     Route::put('/reserva/Aceptar/{id}/{id_aula}', 'ReservaController@acceptReservation'); //aceptar una reserva   admin
+    Route::put('/reserva/Aceptar/{id}/{id_aula1}/{id_aula2}', 'ReservaController@acceptReservationContigua'); //aceptar una reserva   admin
     Route::put('/reserva/Rechazar/{id}', 'ReservaController@rejectReservation'); //rechazar una reserva  admin
     Route::get('/reserva/{id}', 'ReservaController@getById'); //devuelve una reserva por su id
     
