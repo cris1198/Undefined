@@ -391,7 +391,6 @@ class ReservaController extends Controller
                 array_push($aulaAux, $aulasContiguas[$pos]);
                 array_push($aulaAux, $aulasContiguas[$pos+1]);
 
-
                 array_push($aulasRecomendadas, $aulaAux);
 
                 $pos = $pos + 2;
@@ -407,10 +406,8 @@ class ReservaController extends Controller
                 if(!(in_array($aulasContiguas[$pos+1], $aulasReservadas))){
                     array_push($aulaAux, $aulasContiguas[$pos]);
                     array_push($aulaAux, $aulasContiguas[$pos+1]);
-                    echo("entraaa");
-                    print_r($aulaAux);
+                  
                     array_push($aulasRecomendadas, $aulaAux);
-                    print_r($aulasRecomendadas);
                 }
             }
             $pos = $pos + 2;
