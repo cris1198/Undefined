@@ -12,7 +12,11 @@ class GrupoController extends Controller
 
     public function getById($id){            //devuelve los grupos segun su id
         $grupo = Grupo::findOrFail($id);     
-        return $grupo;  
+        $respuesta = array();
+
+            array_push($respuesta, array("nombre" => 1,"id_grupo" => $grupo->id, "grupo" => $grupo->nombreGrupo, "materia" => GrupoController::getName($grupo->id_materias))); //crea el json con los datos importantes
+
+        return $respuesta; 
     }
 
     public function assignUser(Request $request){   //crea un grupo
