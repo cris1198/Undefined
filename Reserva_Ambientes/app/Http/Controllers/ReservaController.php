@@ -15,13 +15,35 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
 class ReservaController extends Controller
 {
+    
+    public function reporteTodos(){
+        $reservas = Reserva::all();
+
+        return $reservas;
+    }
+    public function reporteAceptados(){
+        $id =1;
+        $grupo1 = Reserva::where("aceptadoRechazado","=",$id)->get();
+        return $grupo1;
+    }
+    public function reporteRechazados(){
+        $id =0;
+        $grupo1 = Reserva::where("aceptadoRechazado","=",$id)->get();
+        return $grupo1;
+    }
     public function index()                    //retorna todos las Reservas
     {
         $reservas = Reserva::all();
 
         return $reservas;                     //JSON con las reservas
     }
-
+    public function eliminarReserva($id){
+        $reserva1 = Reserva::findOrFail($id);         //si no encuentra ambiente devuelve falso
+        Reserva::destroy($id);
+        return response()->json([              //JSON con los ambientes
+            'status' => 'eliminado'
+        ], 201);  
+    }
     public function getById($id)                 //retorna una Reserva por el ID
     {
         $reserva = Reserva::findOrFail($id);     //si no encuentra una reserva devuelve falso
