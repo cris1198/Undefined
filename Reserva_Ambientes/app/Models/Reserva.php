@@ -45,6 +45,7 @@ class Reserva extends Model
     public static function Aceptados($userId=''){
         return self::where('id_users', 'like', $userId)
                 ->where('aceptadoRechazado', 'like', 1)
+                ->where('fechaReserva', '>=', date("yyyy-mm-dd"))
                 ->whereNull('razon')
                 ->orderBy('fechaReserva', 'DESC')
                 ->get();
@@ -53,6 +54,7 @@ class Reserva extends Model
     public static function AceptadosContiguas($userId=''){
         return self::where('id_users', 'like', $userId)
                 ->where('aceptadoRechazado', 'like', 1)
+                ->where('fechaReserva', '>=', date("yyyy-mm-dd"))
                 ->whereNotNull('razon')
                 ->orderBy('fechaReserva', 'DESC')
                 ->get();
