@@ -45,9 +45,14 @@ Route::put('/nuevaContraseña','userController@newPassword');
     Route::get('/reserva/Todas/{id}', 'ReservaController@getAcceptAndReject'); //devuelve peticiones rechazadas y aceptadas
 //});
 Route::post('/ambientes','AmbienteController@store');   //agregar nueva
-
+Route::delete('/reserva/{id}','ReservaController@eliminarReserva');  //eliminar registros
 //Route::group(['middleware' => ["auth:sanctum",'adminAgee']], function(){
     //rutas
+
+    Route::get('/reserva/reporteTodos', 'ReservaController@reporteTodos'); //aceptar una reserva   admin
+    Route::get('/reserva/reporteAceptados', 'ReservaController@reporteAceptados'); //aceptar una reserva   admin
+    Route::get('/reserva/reporteRechazados', 'ReservaController@reporteRechazados'); //aceptar una reserva   admin
+
     Route::get('/grupo/paraAsignar', 'GrupoController@getToAssign');  //Devuelve materias con grupos para asignar a docentes
     Route::post('/registro','userController@registro'); // crear nuevo docente
     Route::get('/reserva/PorReservar', 'ReservaController@getToReserve'); //devuelve las reservas por aceptar o rechazar
