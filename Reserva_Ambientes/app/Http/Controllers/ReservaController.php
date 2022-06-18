@@ -83,6 +83,7 @@ class ReservaController extends Controller
     public function acceptReservationContigua($id, $id_aula1, $id_aula2)       //Cambia el estado de rechazado a Aceptado
     {
         $aula1 = Aula::findOrFail($id_aula1);
+        $aula2 = Aula::findOrFail($id_aula2);
         $reserva = Reserva::findOrFail($id);
         if($reserva->aceptadoRechazado == 1){
             return response()->json([   
@@ -99,7 +100,7 @@ class ReservaController extends Controller
             "id_users" => $reserva->id_users,
             "id_grupos" => $reserva->id_grupos,
             "id_aulas" => $id_aula2,
-            "codigo" => $reserva->codigo,
+            "codigo" => $aula2->codigo,
             "cantidadEstudiantes" => $reserva->cantidadEstudiantes,
             "tipo" => $reserva->tipo,
             "fechaReserva" => $reserva->fechaReserva,
@@ -210,6 +211,23 @@ class ReservaController extends Controller
 
     public function getAccepted($id){           //Obtiene las reservas aceptadas
         $reservas = Reserva::Aceptados($id);
+
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva){       //convierte numero de periodo en texto
+                    $j=1;
+                    $bandera = true;
+                    while($j < 11 && $bandera){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+
         return $reservas;
     }
     
@@ -241,6 +259,22 @@ class ReservaController extends Controller
     }
     public function getRejected($id){           //Obtiene las reservas rechazados
         $reservas = Reserva::Rechazados($id);
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva){       //convierte numero de periodo en texto
+                    $j=1;
+                    $bandera = true;
+                    while($j < 11 && $bandera){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+
         return $reservas;
     }
 
@@ -329,7 +363,7 @@ class ReservaController extends Controller
     public function getRecommendationContiguas(Request $request){  //Recomienda aulas segun las caracteristicas, tipo y capacidad ingresado
         
         $tipos = array("Aula", "Laboratorio", "Auditorio");
-        $ubicaciones = array("Edificio Academico 2 planta baja", "Edificio Academico 2 piso 1", "Edificio Academico 2 piso 2", "Edificio Academico piso 3, Biblioteca", "Campus Central");
+        $ubicaciones = array("Edificio Academico 2 planta baja", "Edificio Academico 2 piso 1", "Edificio Academico 2 piso 2", "Edificio Academico 2 piso 3", "Biblioteca", "Campus Central");
         $aulasContiguas = array();
 
         foreach($tipos as $tipo){
@@ -407,10 +441,7 @@ class ReservaController extends Controller
                 if(!(in_array($aulasContiguas[$pos+1], $aulasReservadas))){
                     array_push($aulaAux, $aulasContiguas[$pos]);
                     array_push($aulaAux, $aulasContiguas[$pos+1]);
-                    echo("entraaa");
-                    print_r($aulaAux);
                     array_push($aulasRecomendadas, $aulaAux);
-                    print_r($aulasRecomendadas);
                 }
             }
             $pos = $pos + 2;
