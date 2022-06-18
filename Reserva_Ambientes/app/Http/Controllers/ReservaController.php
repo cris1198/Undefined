@@ -18,7 +18,6 @@ class ReservaController extends Controller
     
     public function reporteTodos(){
         $reservas = Reserva::all();
-
         return $reservas;
     }
     public function reporteAceptados(){
