@@ -94,6 +94,18 @@ class Reserva extends Model
                 ->take(5)
                 ->get();
     }
+
+    public static function AllAcceptAndReject(){
+        return self::whereNotNull('aceptadoRechazado')
+                ->orderBy('created_at', 'ASC')
+                ->get();
+    }
+    
+    public static function AllAcceptAndRejectCont(){
+        return self::whereNotNull('aceptadoRechazado')
+                ->orderBy('created_at', 'ASC')
+                ->get();
+    }
     
     public static function getPrimeros(){
         return self::orderBy('created_at', 'ASC')
