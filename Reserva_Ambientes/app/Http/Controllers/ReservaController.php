@@ -20,6 +20,77 @@ class ReservaController extends Controller
         $reservas = Reserva::all();
         return $reservas;
     }
+
+    public function getAllAcceptAndReject(){           //Obtiene las reservas rechazados
+        $reservas = Reserva::AllAcceptAndReject();
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva){       //convierte numero de periodo en texto
+                    $j=1;
+                    $bandera = true;
+                    while($j < 11 && $bandera){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+
+        return $reservas;
+    }
+
+    public function getAllAcceptAndRejecCont(){           //Obtiene las reservas rechazados
+        $reservas = Reserva::AllAcceptAndRejectCont();
+        $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
+
+            $i=0;
+                foreach ($reservas as $reserva){       //convierte numero de periodo en texto
+                    $j=1;
+                    $bandera = true;
+                    while($j < 11 && $bandera){
+                        if ($reserva["periodo"] == $j) {
+                            $reservas[$i]["periodo"] = $periodosDisponibles[$j];
+                            $bandera = false;
+                        }
+                        $j=$j+1;
+                    }
+                    $i=$i+1;
+                }
+
+        $reservasResp = array();
+
+        foreach($reservas as $reserva){
+            foreach($reservas as $res){
+                $arrayAux = array();
+                $arrayAux2 = array();
+                if(!($reserva->id ==  $res->id)){
+                    if($reserva->id_users ==  $res->id_users && $reserva->id_grupos ==  $res->id_grupos && $reserva->cantidadEstudiantes ==  $res->cantidadEstudiantes &&
+                        $reserva->tipo ==  $res->tipo && $reserva->fechaReserva ==  $res->fechaReserva && $reserva->periodo ==  $res->periodo && $reserva->cantidadPeriodo ==  $res->cantidadPeriodo){
+                        array_push($arrayAux, $reserva);
+                        array_push($arrayAux, $res);
+                        array_push($arrayAux2, $res);
+                        array_push($arrayAux2, $reserva);
+                        if(!(in_array($arrayAux2, $reservasResp))){
+                            array_push($reservasResp, $arrayAux);
+                        }
+                    }
+                    
+                }     
+            }    
+        }
+
+        if(empty($reservasResp)){
+            return response()->json([   
+                'noRecomendacion' => 1,  //JSON con la respuesta
+            ], 501); 
+        }
+
+        return $reservasResp;
+    }
+
     public function reporteAceptados(){
         $id =1;
         $grupo1 = Reserva::where("aceptadoRechazado","=",$id)->get();
@@ -32,39 +103,7 @@ class ReservaController extends Controller
     }
     public function index()                    //retorna todos las Reservas
     {
-        $reservas = Reserva::all();
-        
-        /* $contiguas = array();
-
-        $json= json_encode($reservas);
-        $arrayReservas = json_decode($json, true);
-
-        if(empty($arrayReservas)){
-            return response()->json([              //JSON error
-                'status' => 'No hay reservas'
-            ], 501);
-        }
-
-        $pos = 0;
-        foreach($arrayReservas as $reserva){
-            foreach($arrayReservas as $res){
-                if(!($reserva["id"] ==  $res["id"])){
-                    if($reserva["razon"] == "Aula Contigua"){
-
-                    }else{
-
-                        if(!(in_array($reserva, $reservasResp))){
-                            array_push($reservasResp, $reserva);
-                        }
-                    }
-                }
-            }
-    
-        } */
-
-
-        
-        return $reservas;                     //JSON con las reservas
+        return Reserva::all();                 //JSON con las reservas
     }
 
     public function eliminarReserva($id){
@@ -491,7 +530,7 @@ class ReservaController extends Controller
     public function getRecommendationContiguas(Request $request){  //Recomienda aulas segun las caracteristicas, tipo y capacidad ingresado
         
         $tipos = array("Aula", "Laboratorio", "Auditorio");
-        $ubicaciones = array("Edificio Academico 2 planta baja", "Edificio Academico 2 piso 1", "Edificio Academico 2 piso 2", "Edificio Academico 2 piso 3", "Biblioteca", "Campus Central");
+        $ubicaciones = array("Edificio Academico 2 planta baja", "Edificio Academico 2 piso 1", "Edificio Academico 2 piso 2", "Edificio Academico 2 piso 3", "Biblioteca", "Campus Central", "Trencito", "Laboratorios");
         $aulasContiguas = array();
 
         foreach($tipos as $tipo){

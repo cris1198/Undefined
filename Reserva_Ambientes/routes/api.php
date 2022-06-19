@@ -36,7 +36,6 @@ Route::put('/nuevaContraseña','userController@newPassword');
     Route::get('/reserva/User/{id}', 'ReservaController@getByUserId'); //devuelve una reserva por el usuario quien reserva docente
     Route::get('/reserva/Rechazar/{id}', 'ReservaController@getRejected'); //devuelve las reservas rechazadas de un usuario docente 
     Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas aceptadas de un usuario docente
-    Route::get('/reserva/AceptarCont/{id}', 'ReservaController@getAcceptedContigua'); //devuelve las reservas aceptadas de un usuario docente
     Route::post('/ambientes/buscar','AmbienteController@search_and_filter'); //buscador de Ambientes por palabra
     Route::post('/reserva', 'ReservaController@store'); //agregar una reserva
     Route::post('/reserva/Recomendacion', 'ReservaController@getRecommendation'); //devuelve recomendacion de aulas simples
@@ -52,6 +51,8 @@ Route::delete('/reserva/{id1}/{id2}','ReservaController@eliminarReservaContigua'
     //rutas
 
     Route::get('/reserva/reporteTodos', 'ReservaController@reporteTodos'); //aceptar una reserva   admin
+    Route::get('/reserva/reporteTodosIndividual', 'ReservaController@getAllAcceptAndReject'); //aceptar una reserva   admin
+    Route::get('/reserva/reporteTodosContigua', 'ReservaController@getAllAcceptAndRejecCont'); //aceptar una reserva   admin
     Route::get('/reserva/reporteAceptados', 'ReservaController@reporteAceptados'); //aceptar una reserva   admin
     Route::get('/reserva/reporteRechazados', 'ReservaController@reporteRechazados'); //aceptar una reserva   admin
 
