@@ -93,7 +93,10 @@ class ReservaController extends Controller
 
     public function reporteAceptados(){
         $id =1;
-        $grupo1 = Reserva::where("aceptadoRechazado","=",$id)->get();
+        $grupo1 = Reserva::where("aceptadoRechazado","=",$id)
+                ->where('razon', '!=', 'Aula Contigua')
+                ->orWhereNull('razon')
+                ->get();
         return $grupo1;
     }
     public function reporteRechazados(){
