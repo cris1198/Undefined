@@ -13,7 +13,9 @@
         <div style="margin-left: 40px;">
     @if($details22->aceptadoRechazado === 1)
         <h1>Su solicitud de reserva a sido ACEPTADA</h1>
-        <p><strong>Detalles:</strong></p>
+       <h2>Detalles</h2>
+        <p><strong>Materia: </strong> {{$data22}}</p>
+        <p><strong>Grupo: </strong>{{$data33}}</p>
         <p><strong>Código de aula:</strong> {{ $details22->codigo }} </p>
         <p><strong>Fecha de reserva:</strong> {{ $details22->fechaReserva }} </p>
         <p>
@@ -58,7 +60,6 @@
             @endif
         </p>
         <p><strong>Motivo de reserva:</strong> {{$details22->motivo}}</p>
-        <p><strong>Materia:</strong> {{$details22->materia}}</p> 
         </div> 
         </div>
 
@@ -68,11 +69,14 @@
         <h1>
            Su solicitud de reserva a sido RECHAZADA
         </h1>
+        <h2><strong>Detalles:</strong></h2>
         <p><strong>Razon de rechazo:</strong> {{$details22->razon}}</p>
-        <p><strong>Detalles:</strong></p>
         <p><strong>Codigo de aula:</strong> {{ $details22->codigo }} </p>
-        <p>Fecha de reserva: {{ $details22->fechaReserva }} </p>
-       
+        
+        <p><strong>Fecha de reserva: </strong>{{ $details22->fechaReserva }} </p>
+        <p><strong>Materia: </strong> {{$data22}}</p>
+        <p><strong>Grupo: </strong>{{$data33}}</p>
+        <p><strong>Motivo de reserva: </strong> {{$details22->motivo}}</p>
         <p>
             @if($details22->periodo === 1)
             <strong>Hora de reserva:</strong> 6:45 - 8:15
