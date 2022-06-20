@@ -67,6 +67,23 @@ class Reserva extends Model
                 ->get();
     }
 
+    public static function numAceptados(){
+        return self::where('aceptadoRechazado', 'like', 1)
+                ->whereNull('razon')
+                ->count();
+    }
+
+    public static function numAceptadosContiguas(){
+        return self::where('aceptadoRechazado', 'like', 1)
+                ->whereNotNull('razon')
+                ->count();
+    }
+
+    public static function numRechazados(){
+        return self::where('aceptadoRechazado', 'like', 0)
+                ->count();
+    }
+
     public static function getByAulaId($aulaId='',$fecha='',$periodo=''){
         return self::where('id_aulas', 'like', $aulaId)
                 ->where('fechaReserva', 'like', $fecha)
