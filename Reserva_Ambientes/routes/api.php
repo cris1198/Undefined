@@ -49,7 +49,8 @@ Route::delete('/reserva/{id}','ReservaController@eliminarReserva');  //eliminar 
 Route::delete('/reserva/{id1}/{id2}','ReservaController@eliminarReservaContigua');  //eliminar registros
 //Route::group(['middleware' => ["auth:sanctum",'adminAgee']], function(){
     //rutas
-
+    
+    Route::get('/reserva/Estadisticas', 'ReservaController@getStats'); //aceptar una reserva   admin
     Route::get('/reserva/reporteTodos', 'ReservaController@reporteTodos'); //aceptar una reserva   admin
     Route::get('/reserva/reporteTodosIndividual', 'ReservaController@getAllAcceptAndReject'); //aceptar una reserva   admin
     Route::get('/reserva/reporteTodosContigua', 'ReservaController@getAllAcceptAndRejecCont'); //aceptar una reserva   admin
@@ -66,6 +67,7 @@ Route::delete('/reserva/{id1}/{id2}','ReservaController@eliminarReservaContigua'
     Route::get('/reserva/Urgencia','ReservaController@filterUrgencia');  //mostrar todos las reservas
     Route::put('/grupo/Asignar', 'GrupoController@assignUser');
     Route::put('/grupo/AsignarTodos', 'GrupoController@assignAll');
+
 
     Route::get('/usuario/{id}','userController@getById'); //devuelve un usuario por su id
     Route::delete('/usuario/{id}','userController@destroy'); //elimina un usuario por su id
