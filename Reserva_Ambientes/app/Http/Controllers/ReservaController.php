@@ -104,9 +104,18 @@ class ReservaController extends Controller
         $grupo1 = Reserva::where("aceptadoRechazado","=",$id)->get();
         return $grupo1;
     }
+
     public function index()                    //retorna todos las Reservas
     {
         return Reserva::all();                 //JSON con las reservas
+    }
+
+    public function getStats(){
+        $numAccept = Reserva::numAceptados();
+        $numAcceptCount = Reserva::numAceptadosContiguas();
+        $numReject = Reserva::numRechazados();
+
+        return array("numAccept" => $numAccept,"numAcceptCount" => ($numAcceptCount/2),"numReject" => $numReject, "total" => ($numAccept + ($numAcceptCount/2) + $numReject));
     }
 
     public function eliminarReserva($id){
