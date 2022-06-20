@@ -35,7 +35,8 @@ Route::put('/nuevaContraseña','userController@newPassword');
     Route::post('/reserva', 'ReservaController@store'); //agregar una reserva docente
     Route::get('/reserva/User/{id}', 'ReservaController@getByUserId'); //devuelve una reserva por el usuario quien reserva docente
     Route::get('/reserva/Rechazar/{id}', 'ReservaController@getRejected'); //devuelve las reservas rechazadas de un usuario docente 
-    Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas aceptadas de un usuario docente
+    Route::get('/reserva/Aceptar/{id}', 'ReservaController@getAccepted'); //devuelve las reservas rechazadas de un usuario docente 
+    Route::get('/reserva/AceptarCont/{id}', 'ReservaController@getAcceptedContigua'); //devuelve las reservas aceptadas de un usuario docente
     Route::post('/ambientes/buscar','AmbienteController@search_and_filter'); //buscador de Ambientes por palabra
     Route::post('/reserva', 'ReservaController@store'); //agregar una reserva
     Route::post('/reserva/Recomendacion', 'ReservaController@getRecommendation'); //devuelve recomendacion de aulas simples
