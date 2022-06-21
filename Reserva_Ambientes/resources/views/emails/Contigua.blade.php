@@ -16,7 +16,7 @@
         <p><strong>Grupo: </strong>{{$grupo}}</p>
         <p><strong>Su reserva son dos aulas contiguas</strong></p>
         <p><strong>Primer Aula:</strong> {{ $datos->codigo }} </p>
-        <p><strong>Segunda Aula</strong>{{aula2}}</p>
+        <p><strong>Segunda Aula</strong>{{$aula2}}</p>
         <p><strong>Fecha de reserva:</strong> {{ $datos->fechaReserva }} </p>
         <p>
             @if($datos->periodo === 1)

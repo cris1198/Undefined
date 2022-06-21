@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
+use App\Mail\Contigua;
 class ReservaController extends Controller
 {
     
@@ -296,6 +297,7 @@ class ReservaController extends Controller
 
         if(ReservaController::store($nuevaReserva)){
             //email
+            $usuario = User::where("id","=",$reserva->id_users)->first();
             $grupo = Grupo::where("id","=",$reserva->id_grupos)->first();
             $materia = Materia::where("id","=",$grupo->id_materias)->first();
             $segundaAula= $aula2->codigo;
