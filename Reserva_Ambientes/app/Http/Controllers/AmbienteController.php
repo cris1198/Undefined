@@ -146,7 +146,13 @@ class AmbienteController extends Controller
 
     private function codigoCorrecto($codigo){ //0 si el codigo contiene caracteres no alfanuericos, 1 correcto
         $codigoCorrecto =true;
-        $i = 0 ;
+        $i = 0;
+        $aulas = Aula::all();
+        foreach($aulas as $aula){
+            if($aula->codigo == $codigo){
+                $codigoCorrecto = 0;
+            }
+        }
         if(strlen($codigo)<16 && strlen($codigo) > 2){
             while($i < strlen($codigo) && $codigoCorrecto){
                 $car  = $codigo[$i];
