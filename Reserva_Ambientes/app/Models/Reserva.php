@@ -113,9 +113,9 @@ class Reserva extends Model
     }
 
     public static function AllAcceptAndReject(){
-        return self::whereNotNull('aceptadoRechazado')
-                ->where('razon', '!=', 'Aula Contigua')
+        return self::where('razon', '!=', 'Aula Contigua')
                 ->orWhereNull('razon')
+                ->whereNotNull('aceptadoRechazado')
                 ->orderBy('created_at', 'ASC')
                 ->get();
     }
