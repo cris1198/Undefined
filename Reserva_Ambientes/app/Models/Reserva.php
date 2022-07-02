@@ -43,18 +43,20 @@ class Reserva extends Model
     }
 
     public static function Aceptados($userId=''){
+        $fecha = date("y-m-d");
         return self::where('id_users', 'like', $userId)
                 ->where('aceptadoRechazado', 'like', 1)
-                ->where('fechaReserva', '>=', date("yyyy-mm-dd"))
+                ->where('fechaReserva', '>=', "20$fecha")
                 ->whereNull('razon')
                 ->orderBy('fechaReserva', 'DESC')
                 ->get();
     }
 
     public static function AceptadosContiguas($userId=''){
+        $fecha = date("y-m-d");
         return self::where('id_users', 'like', $userId)
                 ->where('aceptadoRechazado', 'like', 1)
-                ->where('fechaReserva', '>=', date("yyyy-mm-dd"))
+                ->where('fechaReserva', '>=', "20$fecha")
                 ->whereNotNull('razon')
                 ->orderBy('fechaReserva', 'DESC')
                 ->get();
@@ -99,7 +101,9 @@ class Reserva extends Model
     }
 
     public static function porReservar(){
-        return self::whereNull('aceptadoRechazado')
+        $fecha = date("y-m-d");
+        return self::where('fechaReserva', '>=', "20$fecha")
+                ->whereNull('aceptadoRechazado')
                 ->orderBy('fechaReserva', 'DESC')
                 ->get();
     }
@@ -127,21 +131,27 @@ class Reserva extends Model
     }
     
     public static function getPrimeros(){
-        return self::orderBy('created_at', 'ASC')
+        $fecha = date("y-m-d");
+        return self::where('fechaReserva', '>=', "20$fecha")
+                ->orderBy('created_at', 'ASC')
                 ->whereNull('aceptadoRechazado')
                 ->whereNull('id_aulas')
                 ->get();
     }
 
     public static function getUltimos(){
-        return self::orderBy('created_at', 'DESC')
+        $fecha = date("y-m-d");
+        return self::where('fechaReserva', '>=', "20$fecha")
+                ->orderBy('created_at', 'DESC')
                 ->whereNull('aceptadoRechazado')
                 ->whereNull('id_aulas')
                 ->get();
     }
 
     public static function getUrgencia(){
+        $fecha = date("y-m-d");
         return self::where('tipo', 'like', 'Examen')
+                ->where('fechaReserva', '>=', "20$fecha")
                 ->orderBy('fechaReserva', 'ASC')
                 ->whereNull('aceptadoRechazado')
                 ->whereNull('id_aulas')
