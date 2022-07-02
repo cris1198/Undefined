@@ -148,7 +148,7 @@ class ReservaController extends Controller
         $numAcceptCount = Reserva::numAceptadosContiguas();
         $numReject = Reserva::numRechazados();
 
-        return array("numAccept" => $numAccept,"numAcceptCount" => ($numAcceptCount/2),"numReject" => $numReject, "total" => ($numAccept + ($numAcceptCount/2) + $numReject));
+        return array("numAccept" => $numAccept,"numAcceptCount" => (int)($numAcceptCount/2),"numReject" => $numReject, "total" => ($numAccept + (int)($numAcceptCount/2) + $numReject));
     }
 
     public function eliminarReserva($id){
