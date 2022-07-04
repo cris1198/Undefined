@@ -81,6 +81,7 @@ class AmbienteController extends Controller
     {
         $aula = Aula::findOrFail($id);                   //si no encuentra ambiente devuelve falso   
         $capacidadCorrecto = AmbienteController::capacidadCorrecto($request->capacidad);
+        $codigoExiste = AmbienteController::codigoExiste($request->codigo, $id);
         $codigoCorrecto = AmbienteController::codigoCorrecto($request->codigo);
         $caracCorrecto = AmbienteController::caracCorrecto($request->caracteristicas);
         $ubicCorrecto = AmbienteController::caracCorrecto($request->ubicacion);
@@ -90,25 +91,31 @@ class AmbienteController extends Controller
                 'codigo' => 1
              ], 500);
         }else{
-            if(!$capacidadCorrecto){
+            if( !$codigoExiste){
                 return response()->json([   
-                    'capacidad' => 0
-                 ], 500);
+                    'existe' => 1
+                ], 500);
             }else{
-                if( !$ubicCorrecto){
+                if(!$capacidadCorrecto){
                     return response()->json([   
-                        'ubicacion' => 3
-                     ], 500);
+                        'capacidad' => 0
+                    ], 500);
                 }else{
-                    if(!$caracCorrecto){
+                    if( !$ubicCorrecto){
                         return response()->json([   
-                            'caracteristicas' => 2
-                         ], 500);
+                            'ubicacion' => 3
+                        ], 500);
                     }else{
-                        $aula->update($request->except('imagen'));     //guarda cambios
-                        return response()->json([                        
-                            'Respuesta' => 'Actualizado correctamente'
-                        ], 202);
+                        if(!$caracCorrecto){
+                            return response()->json([   
+                                'caracteristicas' => 2
+                            ], 500);
+                        }else{
+                            $aula->update($request->except('imagen'));     //guarda cambios
+                            return response()->json([                        
+                                'Respuesta' => 'Actualizado correctamente'
+                            ], 202);
+                        }
                     }
                 }
             }
@@ -166,6 +173,14 @@ class AmbienteController extends Controller
             $codigoCorrecto = 0;
         }
         return $codigoCorrecto;
+    }
+
+    private function codigoExiste($cod, $id){
+        $aula = Aula::where("codigo","=",$cod)->first();
+        if(isset($aula->id) && ($aula->id != $id)){
+            return true;
+        }
+        return false;
     }
 
     private function caracCorrecto($carac){ //0 si el caracteristicas y ubicacion contiene caracteres no alfanuericos, 1 correcto

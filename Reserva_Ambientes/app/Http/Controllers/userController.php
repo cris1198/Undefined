@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Reserva;
+use App\Models\Grupo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
@@ -172,7 +174,16 @@ class userController extends Controller
 
     public function destroy($id)               //elimina un ambiente
     {
-        $user = User::findOrFail($id);         //si no encuentra ambiente devuelve falso
+        $user = User::findOrFail($id);        //si no encuentra ambiente devuelve falso
+        $reservas = Reserva::where("id_users","=",$id)->get();
+        $grupos = Grupo::where("id_users","=",$id)->get();
+        foreach ($grupos as $grupo){       //convierte numero de periodo en texto
+            $grupo->id_users = NULL;
+            $grupo->save();
+        }
+        foreach ($reservas as $reserva){       //convierte numero de periodo en texto
+            Reserva::destroy($reserva->id);
+        }
         /* $url_image = str_replace('storage', 'public', $aula->imagen);
         Storage::delete($url_image);           //Elimina una imagen */
         User::destroy($id);
@@ -186,11 +197,18 @@ class userController extends Controller
         $request->validate([
             'name' => 'required',
             'apellido' => 'required',
-            'email' => 'required|email',
             'password' => 'required',
             'esAdmin' => 'required',
 
         ]);
+
+        $usuario = User::where("email","=",$request->email)->first();
+        if(isset($usuario->id) && ($usuario->id != $id)){
+            return response()->json([
+                "status" => 0,
+                "msg" => "email ya existe",
+            ]);
+        }
 
         $user = User::findOrFail($id);                   //si no encuentra aula devuelve falso   
         
