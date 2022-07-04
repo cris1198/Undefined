@@ -596,7 +596,6 @@ class ReservaController extends Controller
         $aulas = Aula::recomendar($request->capacidad);
         if($request->cantidadPeriodo == 2){
             $periodo2 = $request->periodo + 1;
-
             $reservas = Reserva::getByFechaPeriodo1($request->fecha, $request->periodo, $periodo2);
         }else{
             $reservas = Reserva::getByFechaPeriodo2($request->fecha, $request->periodo);
@@ -608,6 +607,7 @@ class ReservaController extends Controller
         $json= json_encode($reservas);
         $arrayReservas = json_decode($json, true);
 
+        
         if(!empty($arrayReservas)){
             foreach($reservas as $reserva){
                 $aulaRes = Aula::findOrFail($reserva->id_aulas);
