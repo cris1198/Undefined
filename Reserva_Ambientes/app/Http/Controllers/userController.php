@@ -186,11 +186,18 @@ class userController extends Controller
         $request->validate([
             'name' => 'required',
             'apellido' => 'required',
-            'email' => 'required|email',
             'password' => 'required',
             'esAdmin' => 'required',
 
         ]);
+
+        $usuario = User::where("email","=",$request->email)->first();
+        if(isset($usuario->id) && ($usuario->id != $id)){
+            return response()->json([
+                "status" => 0,
+                "msg" => "email ya existe",
+            ]);
+        }
 
         $user = User::findOrFail($id);                   //si no encuentra aula devuelve falso   
         

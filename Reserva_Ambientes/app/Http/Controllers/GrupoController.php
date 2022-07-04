@@ -56,7 +56,7 @@ class GrupoController extends Controller
         $cont1 = 0;
         while($i<20){
             if($request->$i){
-                $grupo = Grupo::findOrFail($request->$id);
+                $grupo = Grupo::findOrFail($request->$i);
                 $grupo->id_users = GrupoController::getUserId($request->correo);   
                 $grupo->save();
             }
