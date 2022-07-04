@@ -111,7 +111,7 @@ class Reserva extends Model
     public static function AcceptAndReject($userId=''){
         return self::where('id_users', 'like', $userId)
                 ->whereNotNull('aceptadoRechazado')
-                ->orderBy('created_at', 'DESC')
+                ->orderBy('created_at', 'ASC')
                 ->take(5)
                 ->get();
     }
@@ -159,10 +159,10 @@ class Reserva extends Model
     }
     
     public static function getByFechaPeriodo1($fecha='',$periodo='', $periodo2=''){
-        return self::where('fechaReserva', 'like', $fecha)
-                ->where('periodo', 'like', $periodo)
-                ->orWhere('periodo', 'like', $periodo2)
-                ->where('aceptadoRechazado', 'like', 1)
+        return self::where('aceptadoRechazado', 'like', 1)
+                ->where('fechaReserva', '==', $fecha)
+                ->where('periodo', 'like', $periodo) 
+                ->where('periodo', 'like', $periodo2)
                 ->get();
     }
     public static function getByFechaPeriodo2($fecha='',$periodo=''){

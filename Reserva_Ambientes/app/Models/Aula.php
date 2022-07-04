@@ -137,7 +137,7 @@ class Aula extends Model
     public static function recomendar($capacidad=''){
         
         $aulas = self::where('capacidad', '<=', $capacidad+50)
-            ->where('capacidad', '>=', $capacidad) 
+            ->where('capacidad', '>=', $capacidad-1) 
             ->take(5)
             ->get();
         return $aulas;
@@ -146,7 +146,7 @@ class Aula extends Model
     public static function recomendarContiguas($capacidad='', $tipo='', $ubicacion=''){
         
         $aulas = self::where('capacidad', '<=', $capacidad + 30)
-            ->where('capacidad', '>=', $capacidad)
+            ->where('capacidad', '>=', $capacidad-1)
             ->where('tipo', 'like', $tipo)
             ->where('ubicacion', 'like', $ubicacion)
             ->take(10)
