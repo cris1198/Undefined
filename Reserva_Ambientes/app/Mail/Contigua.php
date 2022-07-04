@@ -7,23 +7,24 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-
-class TestMail extends Mailable
+class Contigua extends Mailable
 {
     use Queueable, SerializesModels;
-    public $details22;
-    public $data22;
-    public $data33;
+    public $datos;
+    public $materia;
+    public $grupo;
+    public $aula2;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data,$materia, $grupo)
+    public function __construct($datos1,$materia1,$grupo1,$aula)
     {
-       $this->details22 = $data;
-       $this->data22 = $materia;
-       $this->data33 = $grupo;
+        $this->datos = $datos1;
+        $this->materia = $materia1;
+        $this->grupo = $grupo1;
+        $this->aula2 = $aula;
     }
 
     /**
@@ -33,6 +34,6 @@ class TestMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Notificacion de reserva de aula')->view('emails.TestEmail');
+        return $this->subject('Notificacion de reserva de aula')->view('emails.Contigua');
     }
 }

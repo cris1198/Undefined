@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
+use App\Mail\Contigua;
 class ReservaController extends Controller
 {
     
@@ -309,8 +310,12 @@ class ReservaController extends Controller
                 Mail::to($usuario->email)->send(new TestMail($reserva));
             }
         } */
-        //$usuario = User::where("id","=",$reserva->id_users)->first();
-        //Mail::to($usuario->email)->send(new TestMail($reserva)); // a donde enviaremos el correo de prueba
+        $materia  = "intro a la progra";       
+        $usuario = User::where("id","=",$reserva->id_users)->first();
+
+        $grupo = Grupo::where("id","=",$reserva->id_grupos)->first();
+        $materia = Materia::where("id","=",$grupo->id_materias)->first();
+        Mail::to($usuario->email)->send(new TestMail($reserva,$materia->nombreMateria,$grupo->nombreGrupo)); // a donde enviaremos el correo de prueba
         return response()->json([   
             'Respuesta' => 'Reserva Aceptada Correctamente'
         ], 202);                                 //JSON con la respuesta
@@ -348,9 +353,16 @@ class ReservaController extends Controller
         ));
 
         if(ReservaController::store($nuevaReserva)){
+            //email
+            $usuario = User::where("id","=",$reserva->id_users)->first();
+            $grupo = Grupo::where("id","=",$reserva->id_grupos)->first();
+            $materia = Materia::where("id","=",$grupo->id_materias)->first();
+            $segundaAula= $aula2->codigo;
+            Mail::to($usuario->email)->send(new Contigua($reserva,$materia->nombreMateria,$grupo->nombreGrupo,$segundaAula));
             return response()->json([   
                 'Respuesta' => 'Reserva Aceptada Correctamente'
             ], 202); 
+
         }else{
             return response()->json([   
                 'Respuesta' => 'No se pudo crear la reserva contigua'
@@ -368,7 +380,9 @@ class ReservaController extends Controller
         $reserva->razon = $request->razon;         //1 == Aceptado y 0 == Rechazado
         $reserva->save();
         $usuario = User::where("id","=",$reserva->id_users)->first();
-        Mail::to($usuario->email)->send(new TestMail($reserva)); 
+        $grupo = Grupo::where("id","=",$reserva->id_grupos)->first();
+        $materia = Materia::where("id","=",$grupo->id_materias)->first();
+        Mail::to($usuario->email)->send(new TestMail($reserva,$materia->nombreMateria,$grupo->nombreGrupo)); 
         return response()->json([   
             'Respuesta' => 'Reserva Rechazada Correctamente'
         ], 202);                                 //JSON con la respuesta
@@ -383,7 +397,11 @@ class ReservaController extends Controller
         $cantidadCorrecto = ReservaController::cantidadCorrecto($request->cantidadEstudiantes);
         $periodoCorrecto = ReservaController::cantidadCorrecto($request->periodo);
         $cantidadPeriodoCorrecto = ReservaController::cantidadCorrecto($request->cantidadPeriodo);
-        $razonCorrecto = ReservaController::razonCorrecto($request->motivo);
+        if($request->motivo){
+            $razonCorrecto = ReservaController::razonCorrecto($request->motivo);
+        }else{
+            $razonCorrecto = true;
+        }
         //-----------Fin Validaciones-------------------------
 
                     if(!$cantidadCorrecto){
