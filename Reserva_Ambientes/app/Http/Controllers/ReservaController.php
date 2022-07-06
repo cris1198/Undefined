@@ -218,7 +218,7 @@ class ReservaController extends Controller
     {
         $reservas = Reserva::getPrimeros();
         $periodosDisponibles = array("nada","6:45 - 8:15", "8:15 - 9:45", "9:45 - 11:15", "11:15 - 12:45", "12:45 - 14:15", "14:15 - 15:45", "15:45 - 17:15", "17:15 - 18:45", "18:45 - 20:15", "20:15 - 21:45");
-
+        
         
             $i=0;
                 foreach ($reservas as $reserva){       //convierte numero de periodo en texto
@@ -234,9 +234,20 @@ class ReservaController extends Controller
                     $i=$i+1;
                 }
         
+        $json= json_encode($reservas);
+        $arrayReservas = json_decode($json, true);  
         
+        $i=0;
+        while($i<(sizeof($arrayReservas))){
+            
+            $user = User::findOrFail($arrayReservas[$i]["id_users"]);
+            $nom_completo = sprintf("%s %s", $user->name, $user->apellido);
+            array_push($arrayReservas[$i], array("nombre" => $nom_completo));
+            $i = $i +1;
+        }
 
-        return $reservas;
+
+        return json_encode($arrayReservas);
     }
 
     public function filterUltimos()
@@ -261,7 +272,20 @@ class ReservaController extends Controller
         
         
 
-        return $reservas;
+        $json= json_encode($reservas);
+        $arrayReservas = json_decode($json, true);  
+        
+        $i=0;
+        while($i<(sizeof($arrayReservas))){
+            
+            $user = User::findOrFail($arrayReservas[$i]["id_users"]);
+            $nom_completo = sprintf("%s %s", $user->name, $user->apellido);
+            array_push($arrayReservas[$i], array("nombre" => $nom_completo));
+            $i = $i +1;
+        }
+
+
+        return json_encode($arrayReservas);
     }
 
     public function filterUrgencia()
@@ -286,7 +310,20 @@ class ReservaController extends Controller
         
         
 
-        return $reservas;
+        $json= json_encode($reservas);
+        $arrayReservas = json_decode($json, true);  
+        
+        $i=0;
+        while($i<(sizeof($arrayReservas))){
+            
+            $user = User::findOrFail($arrayReservas[$i]["id_users"]);
+            $nom_completo = sprintf("%s %s", $user->name, $user->apellido);
+            array_push($arrayReservas[$i], array("nombre" => $nom_completo));
+            $i = $i +1;
+        }
+
+
+        return json_encode($arrayReservas);
     }
 
     public function acceptReservation($id, $id_aula)       //Cambia el estado de rechazado a Aceptado
@@ -568,7 +605,20 @@ class ReservaController extends Controller
                 }
               
 
-        return $reservas;
+        $json= json_encode($reservas);
+        $arrayReservas = json_decode($json, true);  
+        
+        $i=0;
+        while($i<(sizeof($arrayReservas))){
+            
+            $user = User::findOrFail($arrayReservas[$i]["id_users"]);
+            $nom_completo = sprintf("%s %s", $user->name, $user->apellido);
+            array_push($arrayReservas[$i], array("nombre" => $nom_completo));
+            $i = $i +1;
+        }
+
+
+        return json_encode($arrayReservas);
     }
 
     public function getAcceptAndReject($id){           //Obtiene las reservas rechazados
